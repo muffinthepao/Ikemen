@@ -2,6 +2,9 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+//controllers
+const pageController = require('./controllers/pages/page_controller')
+
 //Set view engine
 app.set('view engine', 'ejs')
 
@@ -9,9 +12,7 @@ app.set('view engine', 'ejs')
 app.use(express.urlencoded({extended: true}))
 app.use(express.static('public'))
 
-app.get('/', (req, res) => {
-  res.render('./pages/index.ejs')
-})
+app.get('/', pageController.showHome)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
