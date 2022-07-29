@@ -1,9 +1,12 @@
+require('dotenv').config()
+
 const express = require('express')
 const app = express()
 const port = 3000
 
 //controllers
 const pageController = require('./controllers/pages/page_controller')
+
 
 //Set view engine
 app.set('view engine', 'ejs')
