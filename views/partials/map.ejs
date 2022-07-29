@@ -6,7 +6,13 @@
  and consistent behavior across browsers, consider loading using Promises
  with https://www.npmjs.com/package/@googlemaps/js-api-loader.
 -->
+<div id="sidebar">
+  <h2>Results</h2>
+  <ul id="places"></ul>
+  <button id="more">Load more results</button>
+</div>
+
 <script
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLpBPszhddVAwMvzIWN-CATtclvdq-PAo&callback=initMap&v=weekly"
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLpBPszhddVAwMvzIWN-CATtclvdq-PAo&callback=initMap&libraries=places&v=weekly"
   defer
 ></script>

@@ -13,6 +13,7 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.static('public'))
 
 app.get('/', pageController.showHome)
+app.get('/food', pageController.showFood)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

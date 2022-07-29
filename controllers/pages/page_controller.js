@@ -4,6 +4,10 @@ const controller = {
         res.render('./pages/home.ejs')
     },
 
+    showFood: async (req, res) => {
+        res.send('listings')
+    },
+
 
 }
 
