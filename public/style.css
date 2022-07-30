@@ -1,4 +1,4 @@
-/* #map {
+#map {
     height: 90%;
 }
 
@@ -11,7 +11,7 @@ body {
 
 h1 {
     color: red
-} */
+}
 
 /* Optional: Makes the sample page fill the window. */
 /* html,
@@ -39,7 +39,6 @@ body {
 #map {
     flex-basis: 0;
     flex-grow: 4;
-    width: 600px;
     height: 100%;
 }
 

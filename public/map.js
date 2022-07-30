@@ -23,6 +23,14 @@ function initMap() {
         fields: ["name", "geometry"],
     };
 
+    console.log(request)
+
+    // The marker, positioned at Singapore
+    // const marker = new google.maps.Marker({
+    //     position: request,
+    //     map: map,
+    // });
+
     function createMarker(place) {
         if (!place.geometry || !place.geometry.location) return;
         let marker = new google.maps.Marker({
@@ -38,10 +46,10 @@ function initMap() {
     service.textSearch(request, function (results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             for (let i = 0; i < results.length; i++) {
-                console.log(results);
+                console.log(results[i]);
                 createMarker(results[i]);
             }
-            // map.setCenter(results.geometry.location);
+            map.setCenter(results.geometry.location);
         }
     });
 }

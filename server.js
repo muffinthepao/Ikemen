@@ -16,7 +16,8 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.static('public'))
 
 app.get('/', pageController.showHome)
-app.get('/food', pageController.showFood)
+app.get('/food', pageController.showListings)
+app.get('/food/:listing_id', pageController.showIndividualListing)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
