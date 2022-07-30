@@ -7,7 +7,7 @@ const controller = {
 
   showListings: async (req, res) => {
       try {
-          const url ="https://api.yelp.com/v3/businesses/search?term=noodles&location=Singapore&limit=20&offset=40";
+          const url ="https://api.yelp.com/v3/businesses/search?term=noodles&location=Singapore&limit=20";
           const response = await fetch(url, {
               method: "GET",
               headers: {
@@ -27,7 +27,7 @@ const controller = {
       // res.send(foodListings[0]);
   },
 
-  showIndividualListing: (req, res) => {
+  showIndividualListing: async (req, res) => {
       // res.render("./pages/home.ejs");
       const listingID = req.params.listing_id
 
@@ -41,11 +41,13 @@ const controller = {
         });
 
         const json = await response.json();
+        res.send(json)
+        // res.render('./pages/listing.ejs', {listingID})
         
       } catch (err) {
         console.log(err)
       }
-      res.render('./pages/listing.ejs', {listingID})
+
   },
 };
 
