@@ -40,8 +40,8 @@ const controller = {
             },
         });
 
-        const json = await response.json();
-        res.send(json)
+        const listing = await response.json();
+        res.render("./pages/listing.ejs", { listing });
         // res.render('./pages/listing.ejs', {listingID})
         
       } catch (err) {
