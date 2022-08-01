@@ -21,7 +21,7 @@ img {
     display: inline-block;
     position: relative;
     font-family: "FontAwesome";
-    color: grey;
+    color: #ef4444;
   }
   .stars-outer::before {
     content: "\f006 \f006 \f006 \f006 \f006";

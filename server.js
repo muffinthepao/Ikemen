@@ -23,6 +23,7 @@ app.get('/food/:listing_id', pageController.showIndividualListing)
 
 //user routes
 app.get('/users/register', userController.showRegistrationForm)
+app.post('/users/register', userController.register)
 
 
 
