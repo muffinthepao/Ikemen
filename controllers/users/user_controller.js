@@ -4,23 +4,44 @@ const userValidators = require('../validators/users')
 const controller = {
 
   showRegistrationForm: (req, res) => {
-    res.render('pages/register')
+    let errorObject = {
+      email: '',
+      fullName: '',
+      password: '',
+      confirmPassword: '',
+    }
+    res.render('pages/register', {errorObject})
   },
 
   register: async (req, res) => {
 
     //Joi Validation
     const validationResults = userValidators.registerValidator.validate(req.body, {abortEarly: false})
+    const validationError = validationResults.error.details
 
-    if(validationResults.error) {
-      res.send(`failed: ${validationResults.error}`)
-      console.log('failed: ', validationResults.error.details[0]['path'])
-      console.log('failed: ', validationResults.error.details[0]['context'])
+    if(validationError) {
+
+      let errorObject = {
+        email: null,
+        fullName: null,
+        password: null,
+        confirmPassword: null,
+      }
+
+      validationError.forEach(errorMessage => {
+        errorObject[errorMessage.context.key] = errorMessage.message
+      })
+
+      res.render('pages/register', {errorObject})
       return
+
+      // res.send(`failed: ${validationResults.error}`)
+      // console.log('failed: ', validationResults.error.details[0]['path'])
+      // console.log('failed: ', validationResults.error.details[0]['context'])
     }
 
-    // res.send(`success: ${validationResults.value}`)
-    // console.log(validationResults.value)
+    res.send(`success: ${validationResults.value}`)
+    console.log(validationResults.value)
 
     const validatedResults = validationResults.value
 

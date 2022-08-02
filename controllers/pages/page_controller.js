@@ -1,8 +1,7 @@
 const yelpAPI = require("../../source/yelp_api");
-const { yelpIndividualListing } = require("../../source/yelp_api");
 
-const url ="https://api.yelp.com/v3/businesses/search?term=noodles&location=Singapore&limit=20";
-const YELP_API_URI = "https://api.yelp.com/v3/businesses";
+const allListingsURI ="https://api.yelp.com/v3/businesses/search?term=noodles&location=Singapore&limit=20";
+const yelpAPIBase = "https://api.yelp.com/v3/businesses";
 
 const controller = {
     showHome: (req, res) => {
@@ -10,14 +9,14 @@ const controller = {
     },
 
     showListings: async (req, res) => {
-        const listOfFood = await yelpAPI(url);
+        const listOfFood = await yelpAPI(allListingsURI);
         const foodListings = listOfFood.businesses
         res.render("./pages/food.ejs", { foodListings });
     },
 
     showIndividualListing: async (req, res) => {
         const listingID = req.params.listing_id;
-        const listingCall = `${YELP_API_URI}/${listingID}`;
+        const listingCall = `${yelpAPIBase}/${listingID}`;
 
         //Individual Listing
         const listing = await yelpAPI(listingCall);
