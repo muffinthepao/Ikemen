@@ -1,22 +1,20 @@
-// const url = "https://api.yelp.com/v3/businesses/search?term=noodles&location=Singapore&limit=20&offset=20";
+const yelpAPIResponse = async function (yelpURI) {
+    try {
+       const test = await fetch(yelpURI, {
+            method: "GET",
+            headers: {
+                Authorization: process.env.YELP_API,
+            },
+        });
 
-// const response = async function (url) {
-//     try {
-//         await fetch(url, {
-//             method: "GET",
-//             headers: {
-//                 Authorization: process.env.YELP_API,
-//             },
-//         });
+        const apiFetchResponse = await test.json();
+        return apiFetchResponse
 
-//         const json = await response.json();
-//         const food = json.business;
+    } catch (err) {
+      console.log(err)
+      return err
+    }
+};
 
-//     } catch (err) {
-//       console.log(err)
-//     }
-// };
-
-// module.exports = Response;
-
+module.exports = yelpAPIResponse
 

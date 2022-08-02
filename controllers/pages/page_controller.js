@@ -1,5 +1,7 @@
-// const food = require('../../source/yelp_api')
+const yelpAPI = require("../../source/yelp_api");
+const { yelpIndividualListing } = require("../../source/yelp_api");
 
+const url ="https://api.yelp.com/v3/businesses/search?term=noodles&location=Singapore&limit=20";
 const YELP_API_URI = "https://api.yelp.com/v3/businesses";
 
 const controller = {
@@ -8,60 +10,28 @@ const controller = {
     },
 
     showListings: async (req, res) => {
-        try {
-            const url =
-                "https://api.yelp.com/v3/businesses/search?term=noodles&location=Singapore&limit=20";
-            const response = await fetch(url, {
-                method: "GET",
-                headers: {
-                    Authorization: process.env.YELP_API,
-                },
-            });
-
-            const json = await response.json();
-            const foodListings = json.businesses;
-
-            // res.send(foodListings[0]);
-            res.render("./pages/food.ejs", { foodListings });
-        } catch (err) {
-            console.log(err);
-            res.send("Failed to fetch API");
-        }
-        // res.send(foodListings[0]);
+        const listOfFood = await yelpAPI(url);
+        const foodListings = listOfFood.businesses
+        res.render("./pages/food.ejs", { foodListings });
     },
 
     showIndividualListing: async (req, res) => {
-        // res.render("./pages/home.ejs");
         const listingID = req.params.listing_id;
+        const listingCall = `${YELP_API_URI}/${listingID}`;
 
-        try {
-            const listingCall = `${YELP_API_URI}/${listingID}`;
-            const listingResponse = await fetch(listingCall, {
-                method: "GET",
-                headers: {
-                    Authorization: process.env.YELP_API,
-                },
-            });
+        //Individual Listing
+        const listing = await yelpAPI(listingCall);
+        const listingLocation = listing.location;
 
-            const listingReviewsCall = `${YELP_API_URI}/${listingID}/reviews`;
-            const listingReviewsResponse = await fetch(listingReviewsCall, {
-                method: "GET",
-                headers: {
-                    Authorization: process.env.YELP_API,
-                },
-            });
+        //Individual Listing Reviews. Max of 3 reviews. Yelp API limitation. 
+        const listingReviews = await yelpAPI(`${listingCall}/reviews`)
+        const allListingReviews = listingReviews.reviews
 
-            const listing = await listingResponse.json();
-            const listingLocation = listing.location;
-            
-            const listingReviews = await listingReviewsResponse.json();
-            const allListingReviews = listingReviews.reviews;
-
-            // console.log(listing)
-            res.render("./pages/listing.ejs", { listing, listingLocation, allListingReviews });
-        } catch (err) {
-            console.log(err);
-        }
+        res.render("./pages/listing.ejs", {
+          listing,
+          listingLocation,
+          allListingReviews,
+        });
     },
 };
 
