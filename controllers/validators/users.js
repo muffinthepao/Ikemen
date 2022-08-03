@@ -8,7 +8,7 @@ const validators = {
         password: Joi.string().min(3).label("Password").required(),
         // confirm_password: Joi.string().min(4).required()
         confirmPassword: Joi.any().valid(Joi.ref('password')).required().messages({
-            "any.only" : "Passwords must match"
+            "any.only" : '"Passwords" must match'
           })
     })
     

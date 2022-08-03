@@ -57,7 +57,11 @@ const controller = {
     console.log(newUser)
     return
 
-  }
+  },
+
+  showLoginForm: (req, res) => {
+    res.render('pages/login')
+  },
 
 
 };
