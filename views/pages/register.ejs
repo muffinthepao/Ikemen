@@ -15,8 +15,19 @@
           <label for="fullName" class="leading-7 text-sm text-gray-600">Full Name</label>
           <input type="text" id="fullName" name="fullName" class="w-full bg-white rounded border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
           <% if(errorObject.fullName) { %>
-            <p class="text-xs text-red-600">
+            <p class="text-xs text-red-600 -mb-5">
               <%= errorObject.fullName %>
+            </p>
+          <% } %>
+          
+        </div>
+
+        <div class="relative mb-4">
+          <label for="preferredName" class="leading-7 text-sm text-gray-600">Preferred Name</label>
+          <input type="text" id="preferredName" name="preferredName" class="w-full bg-white rounded border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+          <% if(errorObject.preferredName) { %>
+            <p class="text-xs text-red-600 -mb-5">
+              <%= errorObject.preferredName %>
             </p>
           <% } %>
           
@@ -31,29 +42,30 @@
             </p>
           <% } %>
         </div>
+        <div class="relative mb-4 flex justify-between gap-4">
+          <div class="flex-1">
+            <label for="password" class="leading-7 text-sm text-gray-600">Password</label>
+            <input type="password" id="password" name="password" class="w-full bg-white rounded border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+            <% if(errorObject.password) { %>
+              <p class="text-xs text-red-600 -mb-5">
+                <%= errorObject.password %>
+              </p>
+            <% } %>
+          </div>
 
-        <div class="relative mb-4">
-          <label for="password" class="leading-7 text-sm text-gray-600">Password</label>
-          <input type="password" id="password" name="password" class="w-full bg-white rounded border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-          <% if(errorObject.password) { %>
-            <p class="text-xs text-red-600 -mb-5">
-              <%= errorObject.password %>
-            </p>
-          <% } %>
-        </div>
-
-        <div class="relative mb-4">
-          <label for="confirmPassword" class="leading-7 text-sm text-gray-600">Confirm Password</label>
-          <input type="password" id="confirmPassword" name="confirmPassword" class="w-full bg-white rounded border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-          <% if(errorObject.confirmPassword) { %>
-            <p class="text-xs text-red-600">
-              <%= errorObject.confirmPassword %>
-            </p>
-          <% } %>
+          <div class="flex-1">
+            <label for="confirmPassword" class="leading-7 text-sm text-gray-600">Confirm Password</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" class="w-full bg-white rounded border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+            <% if(errorObject.confirmPassword) { %>
+              <p class="text-xs text-red-600">
+                <%= errorObject.confirmPassword %>
+              </p>
+            <% } %>
+          </div>
         </div>
 
         <button class="text-white bg-red-500 border-0 py-2 px-8 focus:outline-none hover:bg-red-600 rounded text-lg">Register</button>
-        <p class="text-xs text-gray-500 mt-3">Click here if you'd like to 
+        <p class="text-xs text-gray-500 mt-3">
           <a href="/users/login" class="text-blue-400">Login</a> instead
         </p>
       </div>
