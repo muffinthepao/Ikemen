@@ -88,29 +88,37 @@ const controller = {
     }
 
     const loginValidated = loginValidationResults.value
-    const loginHash = await bcrypt.hash(loginValidated.password, 10)
 
     console.log('loginValidated.value: ', loginValidated)
-    console.log('loginHash: ', loginHash)
 
 
+    let user = await userModel.findOne({email: loginValidated.email})
 
-    try {
-      user = await userModel.findOne({email: loginValidated.email})
-    } catch (err) {
-      console.log(err)
-      res.send('failed to get user')
-      return
-
+    if (user == null) {
       let errorObject = {
         email: "Email and Password do not match",
         password: "Email and Password do not match"
       }
-      console.log(err)
+
       res.render('pages/login', {errorObject})
       return
     }
-    
+
+    let passwordMatch = await bcrypt.compare(loginValidated.password, user.hash)
+
+    if (!passwordMatch) {
+      let errorObject = {
+        email: "Email and Password do not match",
+        password: "Email and Password do not match"
+      }
+
+      res.render('pages/login', {errorObject})
+      return
+    }
+
+    //create session!
+
+
 
 
   }
