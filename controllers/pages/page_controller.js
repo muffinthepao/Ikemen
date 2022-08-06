@@ -5,6 +5,8 @@ const yelpAPIBase = "https://api.yelp.com/v3/businesses";
 
 const controller = {
     showHome: (req, res) => {
+        res.locals.firstName = "hello"
+        res.locals.lastName = "world"
         res.render("./pages/home.ejs");
     },
 

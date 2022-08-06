@@ -4,10 +4,28 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" type="text/css" href="style.css" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+
   <script src="https://kit.fontawesome.com/3faa00ba1d.js" crossorigin="anonymous"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            clifford: '#da373d',
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <!-- <link rel="stylesheet" href="../../public/tailwind_output.css"> -->
+  <!-- <link href="../../public/tailwind_output.css"> -->
+  
+  <!-- <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.1/dist/flowbite.min.css" /> -->
   <!-- <script type="module" src="map.js"></script>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
   <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
@@ -37,13 +55,15 @@
       </nav>
 
       <button class="inline-flex items-center border-0 py-1 px-3 focus:outline-none hover:text-red-500 rounded text-base mt-4 md:mt-0">
-        <a href="/users/login">Login</a>
+        <a href="/login">Login</a>
       </button>
 
       <button class="inline-flex items-center bg-red-100 border-0 py-1 px-3 focus:outline-none hover:bg-red-400 hover:text-white rounded text-base mt-4 md:mt-0">
-        <a href="/users/register">Register</a>
+        <a href="/register">Register</a>
       </button>
     </div>
+  </header>
+  <header>
   </header>
 
   <main>
