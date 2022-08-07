@@ -23,13 +23,16 @@ const controller = {
         //Individual Listing
         const listing = await yelpAPI(listingCall);
         const listingLocation = listing.location;
+        const listingId = listing.id;
 
         //Individual Listing Reviews. Max of 3 reviews. Yelp API limitation. 
         const listingReviews = await yelpAPI(`${listingCall}/reviews`)
         const allListingReviews = listingReviews.reviews
 
+
         res.render("./pages/listing.ejs", {
           listing,
+          listingID,
           listingLocation,
           allListingReviews,
         });
