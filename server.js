@@ -37,13 +37,14 @@ app.get("/food", pageController.showListings);
 app.get("/food/:listing_id", pageController.showIndividualListing);
 
 //review routes
-app.post("/food/:listing_id/review", listingController.submitReview)
+app.post("/food/:listing_id/review", listingController.submitReview);
 
 //authentication routes
 app.get("/register", authController.showRegistrationForm);
 app.post("/register", authController.register);
 app.get("/login", authController.showLoginForm);
 app.post("/login", authController.login);
+app.post("/logout", authController.logout);
 
 //user routes
 app.get("/user/profile", userController.showProfile);

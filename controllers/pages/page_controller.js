@@ -29,16 +29,19 @@ const controller = {
         const listingLocation = listing.location;
         const listingId = listing.id;
 
-        //Individual Listing Reviews. Max of 3 reviews. Yelp API limitation. 
-        const listingReviews = await yelpAPI(`${listingCall}/reviews`)
-        const allListingReviews = listingReviews.reviews
+        //Yelp Reviews. Max of 3 reviews. Yelp API limitation. 
+        const yelpReviews = await yelpAPI(`${listingCall}/reviews`)
+        const allYelpReviews = yelpReviews.reviews
+
+        //Ikemen Reviews
+
 
 
         res.render("./pages/listing.ejs", {
           listing,
           listingID,
           listingLocation,
-          allListingReviews,
+          allYelpReviews,
           errorObject
         });
     },

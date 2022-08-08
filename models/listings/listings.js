@@ -12,15 +12,27 @@ const listingSchema = new mongoose.Schema({
     required: true,
   },
 
-  reviewCount: {
-    type: Number,
-    required: true,
-  },
-
   reviews: [{
     type: Schema.Types.ObjectId,
     ref: "Review",
   }],
+
+  reviewCount: {
+    type: Number,
+    required: true,
+    default: 0
+  },
+
+  saves: [{
+    type: Schema.Types.ObjectId,
+    ref: "Saves",
+  }],
+
+  saveCount: {
+    type: Number,
+    required: true,
+    default: 0
+  }
 });
 
 const Listing = mongoose.model('Listing', listingSchema)

@@ -68,9 +68,9 @@
           <a href="/user/profile">Profile</a>
         </button>
 
-        <button class="inline-flex items-center border-0 py-1 px-3 focus:outline-none hover:text-red-500 rounded text-base mt-4 md:mt-0">
-          <a href="/logout">Logout</a>
-        </button>
+        <form class="inline-flex items-center border-0 py-1 px-3 focus:outline-none hover:text-red-500 rounded text-base mt-4 md:mt-0" method="POST" action="/logout">
+          <button>Logout</button>
+        </form>
   
       <% } else { %>
         <button class="inline-flex items-center border-0 py-1 px-3 focus:outline-none hover:text-red-500 rounded text-base mt-4 md:mt-0">
