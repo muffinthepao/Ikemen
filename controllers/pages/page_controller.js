@@ -3,6 +3,9 @@ const yelpAPI = require("../../source/yelp_api");
 const allListingsURI ="https://api.yelp.com/v3/businesses/search?term=noodles&location=Singapore&limit=20";
 const yelpAPIBase = "https://api.yelp.com/v3/businesses";
 
+const listingModel = require("../../models/listings/listings");
+const reviewModel = require("../../models/reviews/reviews");
+
 const controller = {
     showHome: (req, res) => {
         res.locals.firstName = "hello"
@@ -27,20 +30,20 @@ const controller = {
         //Individual Listing
         const listing = await yelpAPI(listingCall);
         const listingLocation = listing.location;
-        const listingId = listing.id;
 
         //Yelp Reviews. Max of 3 reviews. Yelp API limitation. 
         const yelpReviews = await yelpAPI(`${listingCall}/reviews`)
         const allYelpReviews = yelpReviews.reviews
 
         //Ikemen Reviews
-
-
+        const allIkemenReviews = await reviewModel.find({yelpID: listingID}).populate("user")
+        console.log(allIkemenReviews)
 
         res.render("./pages/listing.ejs", {
           listing,
           listingID,
           listingLocation,
+          allIkemenReviews,
           allYelpReviews,
           errorObject
         });

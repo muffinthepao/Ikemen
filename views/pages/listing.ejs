@@ -66,6 +66,36 @@
             </div>
           </form>
 
+          <% if (allIkemenReviews !== null) { %>
+            <% allIkemenReviews.forEach(i => { %>
+              <% const ikemenUserRatingPercentage  = (i.rating/ 5) * 100 %>
+              <div class="border-b pb-10 mb-10 border-gray-200">
+                <!-- <h1 class="text-gray-900 text-3xl title-font font-medium mb-1">The Catcher in the Rye</h1> -->
+                <div class="h-full flex items-center border-gray-200">
+                  <!-- <img alt="team" class="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4" src="<%# i.user.image_url %>"> -->
+                  <div class="w-16 h-16 inline-flex items-center justify-center rounded-full bg-red-100 text-red-500 mb-5 flex-shrink-0">
+                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-12 h-12" viewBox="0 0 24 24">
+                      <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                  </div>
+                  <div class="flex-grow">
+                    <h2 class="text-gray-900 title-font font-medium"><%= i.user.name %></h2>
+                    <p class="text-gray-500">UI Designer</p>
+                  </div>
+                </div>
+                <div class="flex items-center mt-2.5 mb-5">
+                  <div class="stars-outer">
+                    <div class="stars-inner" style="width: <% ikemenUserRatingPercentage %>%"></div>
+                  </div>
+                  <span class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded ml-3">IKEMEN</span>
+                </div>
+                <p class="leading-relaxed"><%= i.content %></p>
+              </div>
+  
+            <% }) %>
+          <% } %> 
+
           <% allYelpReviews.forEach(r => { %>
             <% const yelpUserRatingPercentage = `${(r.rating/ 5) * 100}%`; %>
             <div class="border-b pb-10 mb-10 border-gray-200">
@@ -79,9 +109,9 @@
               </div>
               <div class="flex mb-4">
                 <div class="stars-outer">
-                  <div class="stars-inner" style="width: 70%"> wow</div>
+                  <div class="stars-inner" style="width: 70%"></div>
                 </div>
-                <span class="flex items-center">
+                <!-- <span class="flex items-center">
                   <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
                   </svg>
@@ -98,7 +128,7 @@
                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
                   </svg>
                   <span class="text-gray-600 ml-3"><%= yelpUserRatingPercentage%>/5</span>
-                </span>
+                </span> -->
                 <span class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded ml-3">YELP</span>
               </div>
               <p class="leading-relaxed"><%= r.text %> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
