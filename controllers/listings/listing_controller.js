@@ -1,11 +1,12 @@
 const yelpAPI = require("../../source/yelp_api");
 const yelpAPIBase = "https://api.yelp.com/v3/businesses";
 
-const reviewModel = require('../../models/reviews/reviews')
+const userModel = require('../../models/authentication/users')
 const listingModel = require('../../models/listings/listings')
+const reviewModel = require('../../models/reviews/reviews')
 
-const reviewsValidator = require('../validators/reviews')
 const listingsValidator = require('../validators/listings')
+const reviewsValidator = require('../validators/reviews')
 
 const controller = {
   submitReview: async (req, res) => {
@@ -45,7 +46,26 @@ const controller = {
 
     const reviewValidated = reviewValidationResults.value
 
+    let user = await userModel.findOne({email: req.session.user})
+
+    if (user == null) {
+      res.render('pages/login')
+      return
+    }
+
     //create review document in db
+    try {
+      await reviewModel.create({
+        content: reviewValidated.content,
+        rating: reviewValidated.rating,
+        user: user._id
+      })
+
+      res.redirect('/')
+    } catch (err) {
+      console.log(err)
+      res.send("cannot create review")
+    }
   },
 };
 

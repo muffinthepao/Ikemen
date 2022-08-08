@@ -11,6 +11,8 @@ const controller = {
     },
 
     showListings: async (req, res) => {
+        let errorObject = {}
+
         const listOfFood = await yelpAPI(allListingsURI);
         const foodListings = listOfFood.businesses
         res.render("./pages/food.ejs", { foodListings, errorObject });
