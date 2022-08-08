@@ -1,4 +1,3 @@
-// const bcrypt = require('bcrypt')
 const userModel = require('../../models/authentication/users')
 const userValidators = require('../validators/users')
 

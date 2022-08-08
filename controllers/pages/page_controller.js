@@ -13,10 +13,12 @@ const controller = {
     showListings: async (req, res) => {
         const listOfFood = await yelpAPI(allListingsURI);
         const foodListings = listOfFood.businesses
-        res.render("./pages/food.ejs", { foodListings });
+        res.render("./pages/food.ejs", { foodListings, errorObject });
     },
 
     showIndividualListing: async (req, res) => {
+        let errorObject = {}
+
         const listingID = req.params.listing_id;
         const listingCall = `${yelpAPIBase}/${listingID}`;
 
@@ -35,6 +37,7 @@ const controller = {
           listingID,
           listingLocation,
           allListingReviews,
+          errorObject
         });
     },
 };

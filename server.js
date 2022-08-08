@@ -13,7 +13,7 @@ const mongoConnectionStr = `mongodb+srv://${process.env.MONGO_USER}:${process.en
 const authController = require("./controllers/authentication/authentication_controller");
 const pageController = require("./controllers/pages/page_controller");
 const userController = require("./controllers/users/user_controller");
-const reviewController = require("./controllers/reviews/review_controller");
+const listingController = require("./controllers/listings/listing_controller");
 const authMiddleware = require("./middlewares/auth_middleware");
 
 //Set view engine
@@ -28,7 +28,7 @@ app.use(session({ //creates a session each time you access the page
   saveUninitialized: true,
   cookie: { secure: false, httpOnly: false, maxAge: 1 * hour }
 }))
-// app.use(authMiddleware.setAuthUserVar)
+app.use(authMiddleware.setAuthUserVar)
 
 
 //page routes
@@ -37,7 +37,7 @@ app.get("/food", pageController.showListings);
 app.get("/food/:listing_id", pageController.showIndividualListing);
 
 //review routes
-app.post("/food/:listing_id/review", reviewController.submitReview)
+app.post("/food/:listing_id/review", listingController.submitReview)
 
 //authentication routes
 app.get("/register", authController.showRegistrationForm);

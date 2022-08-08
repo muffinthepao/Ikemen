@@ -13,7 +13,6 @@ const validators = {
       .label("Email")
       .required(),
     password: Joi.string().min(3).label("Password").required(),
-    // confirm_password: Joi.string().min(4).required()
     confirmPassword: Joi.any().valid(Joi.ref("password")).required().messages({
       "any.only": '"Passwords" must match',
     }),

@@ -37,7 +37,7 @@ const controller = {
     //turn password string to hashed value
     const registerHash = await bcrypt.hash(registerValidated.password, 10)
 
-    //"push" user data into db
+    //create user document in db
     try {
       await userModel.create({
         fullName: registerValidated.fullName,
