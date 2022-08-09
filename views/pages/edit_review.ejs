@@ -8,7 +8,7 @@
         <path d="M5 12h14M12 5l7 7-7 7"></path>
       </svg>
     </a> -->
-    <form id="review-form" method="POST" action="/food/<%= listingID %>/review">
+    <form id="review-form" method="POST" action="/food/<%= listingID %>/review/<%= review._id %>/edit?_method=PUT">
       <div class="mb-5 w-full bg-gray-50 rounded-lg border border-gray-200 text-center">
           <div class="py-2 px-4 bg-white rounded-t-lg">
               <label for="content" class="sr-only">Your review</label>

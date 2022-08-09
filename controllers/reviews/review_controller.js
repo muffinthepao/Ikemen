@@ -1,5 +1,6 @@
 const yelpAPI = require("../../source/yelp_api");
 const yelpAPIBase = "https://api.yelp.com/v3/businesses";
+const mongoose = require("mongoose");
 
 const userModel = require("../../models/authentication/users");
 const listingModel = require("../../models/listings/listings");
@@ -46,11 +47,6 @@ const controller = {
 
     let user = await userModel.findOne({ email: req.session.user });
 
-    // if (user == null) {
-    //   res.redirect("/login");
-    //   return;
-    // }
-
     //create review document in db
     try {
       const review = await reviewModel.create({
@@ -94,6 +90,9 @@ const controller = {
   showReview: async (req, res) => {
     const listingID = req.params.listing_id;
     const reviewID = req.params.review_id;
+
+    console.log("reviewID: ", reviewID)
+    // console.log("req:", req)
     let errorObject = {};
 
     try {
@@ -103,9 +102,9 @@ const controller = {
       const listing = await yelpAPI(listingCall);
   
       //get review info
-      const review = await reviewModel.findById(reviewID)
+      const review = await reviewModel.findById(reviewID).populate("user")
+      console.log("review: ", review)
   
-      
       res.render('./pages/edit_review.ejs', {
         errorObject,
         listing,
@@ -117,7 +116,41 @@ const controller = {
       console.log(err)
       res.send("cannot edit review right now")
     }
+  },
+
+  editReview: async (req, res) => {
+    const listingID = req.params.listing_id;
+    const reviewID = req.params.review_id;
+    let errorObject = {};
+    res.send(req.body)
+
+    // try {
+    //   const reviewValidationResults = reviewsValidator.reviewValidator.validate(req.body, { abortEarly: false });
+
+      
+    //   if (reviewValidationResults.error) {
+    //     const validationError = reviewValidationResults.error.details;
+    //     validationError.forEach((errorMessage) => {
+    //       errorObject[errorMessage.context.key] = errorMessage.message;
+    //     });
+
+    //     res.render('./pages/edit_review.ejs', {errorObject})
+
+    //   }
+      
+    //   //get review info
+    //   const review = await reviewModel.findById(reviewID).populate("user")
+
+      
+
+    //   res.redirect(`/food/${listingID}`)
+
+    // } catch (err) {
+    //   console.log(err)
+    //   res.send("cannot edit review right now")
+    // }
   }
+
 };
 
 module.exports = controller;

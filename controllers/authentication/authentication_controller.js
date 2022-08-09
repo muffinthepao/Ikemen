@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
 const userModel = require('../../models/authentication/users')
 const userValidators = require('../validators/users')
+const pushErrorMessages = require('../../middlewares/errorObject_middleware')
 
 const controller = {
 
@@ -133,6 +134,7 @@ const controller = {
           }
 
           res.redirect('/food/KsHdXhRdu9UzjZXO7g9BHg/review/62f11807d5613a21859b89a5')
+          // res.redirect('/')
       })
     })
     

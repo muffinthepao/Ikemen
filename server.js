@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
+const methodOverride = require('method-override');
 const mongoose = require("mongoose");
 const session = require("express-session");
 
@@ -22,6 +23,7 @@ app.set("view engine", "ejs");
 //apply middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use(methodOverride('_method'));
 app.use(session({ //creates a session each time you access the page
   secret: process.env.SESSION_SECRET,
   resave: false,
@@ -39,6 +41,7 @@ app.get("/food/:listing_id", pageController.showIndividualListing);
 //review routes
 app.post("/food/:listing_id/review", authMiddleware.isAuthenticated ,reviewController.submitReview);
 app.get("/food/:listing_id/review/:review_id", authMiddleware.isAuthenticated ,reviewController.showReview);
+app.put("/food/:listing_id/review/:review_id/edit", authMiddleware.isAuthenticated ,reviewController.editReview);
 
 
 //authentication routes
