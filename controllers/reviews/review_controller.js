@@ -14,10 +14,7 @@ const controller = {
     let errorObject = {};
 
     //Joi validation
-    const reviewValidationResults = reviewsValidator.reviewValidator.validate(
-      req.body,
-      { abortEarly: false }
-    );
+    const reviewValidationResults = reviewsValidator.reviewValidator.validate(req.body, { abortEarly: false });
 
     if (reviewValidationResults.error) {
       const validationError = reviewValidationResults.error.details;
@@ -94,8 +91,32 @@ const controller = {
     }
   },
 
-  showReview: (req, res) => {
-    res.render('./pages/edit_review.ejs')
+  showReview: async (req, res) => {
+    const listingID = req.params.listing_id;
+    const reviewID = req.params.review_id;
+    let errorObject = {};
+
+    try {
+      
+      //get listing info
+      const listingCall = `${yelpAPIBase}/${listingID}`;
+      const listing = await yelpAPI(listingCall);
+  
+      //get review info
+      const review = await reviewModel.findById(reviewID)
+  
+      
+      res.render('./pages/edit_review.ejs', {
+        errorObject,
+        listing,
+        listingID,
+        review
+      })
+
+    } catch (err) {
+      console.log(err)
+      res.send("cannot edit review right now")
+    }
   }
 };
 

@@ -40,6 +40,7 @@ app.get("/food/:listing_id", pageController.showIndividualListing);
 app.post("/food/:listing_id/review", authMiddleware.isAuthenticated ,reviewController.submitReview);
 app.get("/food/:listing_id/review/:review_id", authMiddleware.isAuthenticated ,reviewController.showReview);
 
+
 //authentication routes
 app.get("/register", authController.showRegistrationForm);
 app.post("/register", authController.register);

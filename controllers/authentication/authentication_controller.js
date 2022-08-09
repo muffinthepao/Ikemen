@@ -132,7 +132,7 @@ const controller = {
               return
           }
 
-          res.redirect('/food/KsHdXhRdu9UzjZXO7g9BHg')
+          res.redirect('/food/KsHdXhRdu9UzjZXO7g9BHg/review/62f11807d5613a21859b89a5')
       })
     })
     
