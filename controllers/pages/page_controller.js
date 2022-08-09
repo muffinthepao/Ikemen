@@ -5,6 +5,7 @@ const yelpAPIBase = "https://api.yelp.com/v3/businesses";
 
 const listingModel = require("../../models/listings/listings");
 const reviewModel = require("../../models/reviews/reviews");
+const userModel = require('../../models/authentication/users')
 
 const controller = {
     showHome: (req, res) => {
@@ -36,8 +37,10 @@ const controller = {
         const allYelpReviews = yelpReviews.reviews
 
         //Ikemen Reviews
-        const allIkemenReviews = await reviewModel.find({yelpID: listingID}).populate("user")
-        console.log(allIkemenReviews)
+        const allIkemenReviews = await reviewModel.find({yelpID: listingID}).populate([{
+            path: "user",
+            select: "fullName preferredName email"
+        }])
 
         res.render("./pages/listing.ejs", {
           listing,

@@ -49,10 +49,10 @@ const controller = {
 
     let user = await userModel.findOne({ email: req.session.user });
 
-    if (user == null) {
-      res.redirect("/login");
-      return;
-    }
+    // if (user == null) {
+    //   res.redirect("/login");
+    //   return;
+    // }
 
     //create review document in db
     try {
@@ -93,6 +93,10 @@ const controller = {
       res.send("cannot create review");
     }
   },
+
+  showReview: (req, res) => {
+    res.render('./pages/edit_review.ejs')
+  }
 };
 
 module.exports = controller;

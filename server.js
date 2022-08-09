@@ -13,7 +13,7 @@ const mongoConnectionStr = `mongodb+srv://${process.env.MONGO_USER}:${process.en
 const authController = require("./controllers/authentication/authentication_controller");
 const pageController = require("./controllers/pages/page_controller");
 const userController = require("./controllers/users/user_controller");
-const listingController = require("./controllers/listings/listing_controller");
+const reviewController = require("./controllers/reviews/review_controller");
 const authMiddleware = require("./middlewares/auth_middleware");
 
 //Set view engine
@@ -37,7 +37,8 @@ app.get("/food", pageController.showListings);
 app.get("/food/:listing_id", pageController.showIndividualListing);
 
 //review routes
-app.post("/food/:listing_id/review", listingController.submitReview);
+app.post("/food/:listing_id/review", authMiddleware.isAuthenticated ,reviewController.submitReview);
+app.get("/food/:listing_id/review/:review_id", authMiddleware.isAuthenticated ,reviewController.showReview);
 
 //authentication routes
 app.get("/register", authController.showRegistrationForm);

@@ -32,7 +32,6 @@
               <path d="M5 12h14M12 5l7 7-7 7"></path>
             </svg>
           </a> -->
-
           <form id="review-form" method="POST" action="/food/<%= listingID %>/review">
             <div class="mb-5 w-full bg-gray-50 rounded-lg border border-gray-200">
                 <div class="py-2 px-4 bg-white rounded-t-lg">
@@ -70,27 +69,41 @@
             <% allIkemenReviews.forEach(i => { %>
               <% const ikemenUserRatingPercentage  = (i.rating/ 5) * 100 %>
               <div class="border-b pb-10 mb-10 border-gray-200">
-                <!-- <h1 class="text-gray-900 text-3xl title-font font-medium mb-1">The Catcher in the Rye</h1> -->
                 <div class="h-full flex items-center border-gray-200">
-                  <!-- <img alt="team" class="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4" src="<%# i.user.image_url %>"> -->
-                  <div class="w-16 h-16 inline-flex items-center justify-center rounded-full bg-red-100 text-red-500 mb-5 flex-shrink-0">
+                  <% if (i.user.profilePic) { %>
+                    <img alt="team" class="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4" src="<%= i.user.profilePic %>">
+                  <% } else { %>
+                    <img alt="team" class="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4" src="https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-PNG.png">
+                  <% } %>
+                  <!-- <div class="w-16 h-16 inline-flex items-center justify-center object-center rounded-full bg-red-100 text-red-500 mb-5 flex-shrink-0">
                     <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-12 h-12" viewBox="0 0 24 24">
                       <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
                       <circle cx="12" cy="7" r="4"></circle>
                     </svg>
-                  </div>
+                  </div> -->
                   <div class="flex-grow">
-                    <h2 class="text-gray-900 title-font font-medium"><%= i.user.name %></h2>
-                    <p class="text-gray-500">UI Designer</p>
+                    <h2 class="text-gray-900 title-font font-medium"><%= i.user.fullName %></h2>
                   </div>
                 </div>
                 <div class="flex items-center mt-2.5 mb-5">
-                  <div class="stars-outer">
-                    <div class="stars-inner" style="width: <% ikemenUserRatingPercentage %>%"></div>
-                  </div>
+                  <svg aria-hidden="true" class="w-5 h-5 text-yellow-300 dark:text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Fifth star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                  <p class="ml-2 text-sm font-medium text-gray-900 dark:text-white"><%= i.rating %> out of 5</p>
                   <span class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded ml-3">IKEMEN</span>
                 </div>
                 <p class="leading-relaxed"><%= i.content %></p>
+
+                <aside>
+                  <!-- <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">19 people found this helpful</p> -->
+                  <div class="flex items-center mt-3 space-x-3 divide-x divide-gray-200 dark:divide-gray-600">
+                    <% if (i.user.email === authUser) { %>
+                      <a href="/food/<%= listingID %>/review/<%=i._id%>" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-xs px-2 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Edit</a>
+                      <a href="#" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-xs px-2 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Delete</a>
+                    <% } else { %> 
+                      <a href="#" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-xs px-2 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Report abuse</a>
+                    <% } %>  
+                      <!-- <a href="#" class="pl-4 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">Report abuse</a> -->
+                  </div>
+              </aside>
               </div>
   
             <% }) %>
@@ -104,7 +117,7 @@
                 <img alt="team" class="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4" src="<%= r.user.image_url %>">
                 <div class="flex-grow">
                   <h2 class="text-gray-900 title-font font-medium"><%= r.user.name %></h2>
-                  <p class="text-gray-500">UI Designer</p>
+                  <!-- <p class="text-gray-500">UI Designer</p> -->
                 </div>
               </div>
               <div class="flex mb-4">
@@ -129,6 +142,8 @@
                   </svg>
                   <span class="text-gray-600 ml-3"><%= yelpUserRatingPercentage%>/5</span>
                 </span> -->
+                <svg aria-hidden="true" class="w-5 h-5 text-yellow-300 dark:text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Fifth star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <p class="ml-2 text-sm font-medium text-gray-900 dark:text-white"><%= r.rating %> out of 5</p>
                 <span class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded ml-3">YELP</span>
               </div>
               <p class="leading-relaxed"><%= r.text %> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
