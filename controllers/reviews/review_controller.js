@@ -30,17 +30,24 @@ const controller = {
       const listing = await yelpAPI(listingCall);
       const listingLocation = listing.location;
 
-      //Individual Listing Reviews. Max of 3 reviews. Yelp API limitation.
-      const listingReviews = await yelpAPI(`${listingCall}/reviews`);
-      const allListingReviews = listingReviews.reviews;
+      //Yelp Reviews. Max of 3 reviews. Yelp API limitation. 
+      const yelpReviews = await yelpAPI(`${listingCall}/reviews`)
+      const allYelpReviews = yelpReviews.reviews
+
+      const allIkemenReviews = await reviewModel.find({yelpID: listingID}).populate([{
+        path: "user",
+        select: "fullName preferredName email"
+    }])
 
       res.render("./pages/listing.ejs", {
         listing,
         listingID,
         listingLocation,
-        allListingReviews,
+        allIkemenReviews,
+        allYelpReviews,
         errorObject,
       });
+      return
     }
 
     const reviewValidated = reviewValidationResults.value;
@@ -103,13 +110,13 @@ const controller = {
   
       //get review info
       const review = await reviewModel.findById(reviewID).populate("user")
-      console.log("review: ", review)
-  
+
       res.render('./pages/edit_review.ejs', {
         errorObject,
         listing,
         listingID,
-        review
+        review,
+        reviewID
       })
 
     } catch (err) {
@@ -122,33 +129,51 @@ const controller = {
     const listingID = req.params.listing_id;
     const reviewID = req.params.review_id;
     let errorObject = {};
-    res.send(req.body)
 
-    // try {
-    //   const reviewValidationResults = reviewsValidator.reviewValidator.validate(req.body, { abortEarly: false });
+    try {
+      //get listing info
+      const listingCall = `${yelpAPIBase}/${listingID}`;
+      const listing = await yelpAPI(listingCall);
 
-      
-    //   if (reviewValidationResults.error) {
-    //     const validationError = reviewValidationResults.error.details;
-    //     validationError.forEach((errorMessage) => {
-    //       errorObject[errorMessage.context.key] = errorMessage.message;
-    //     });
+      //get review info
+      const review = await reviewModel.findById(reviewID).populate("user")
 
-    //     res.render('./pages/edit_review.ejs', {errorObject})
+      if(!review) {
+        res.redirect(`/food/${listingID}`)
+      }
 
-    //   }
-      
-    //   //get review info
-    //   const review = await reviewModel.findById(reviewID).populate("user")
+      const reviewValidationResults = reviewsValidator.reviewValidator.validate(req.body, { abortEarly: false });
 
-      
+      if (reviewValidationResults.error) {
+        const validationError = reviewValidationResults.error.details;
+        validationError.forEach((errorMessage) => {
+          errorObject[errorMessage.context.key] = errorMessage.message;
+        });
 
-    //   res.redirect(`/food/${listingID}`)
+        res.render('./pages/edit_review.ejs', {
+          listing,
+          listingID,
+          review,
+          reviewID,
+          errorObject
+        })
+        return
+      }
 
-    // } catch (err) {
-    //   console.log(err)
-    //   res.send("cannot edit review right now")
-    // }
+      const reviewValidated = reviewValidationResults.value;
+
+      const updateReview = await reviewModel.findByIdAndUpdate(reviewID, {
+        content: reviewValidated.content,
+        rating: reviewValidated.rating,
+        edited: true
+      })
+
+      res.redirect(`/food/${listingID}`)
+
+    } catch (err) {
+      console.log(err)
+      res.send("cannot edit review right now")
+    }
   }
 
 };

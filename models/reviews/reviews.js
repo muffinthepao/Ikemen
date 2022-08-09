@@ -17,6 +17,12 @@ const reviewSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+
+  edited: {
+    type: Boolean,
+    required: true,
+    default: false
+  }
 });
 
 const Review = mongoose.model('Review', reviewSchema)
