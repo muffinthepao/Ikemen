@@ -23,12 +23,10 @@ const controller = {
     const offset = (page - 1) * limit
 
     if (page < 4) {
-      pageArray = [1, 2, 3, 4, 5]
+       pageArray = [1, 2, 3, 4, 5]
     } else {
       pageArray = [page - 2, page - 1, page, page + 1, page + 2]
     }
-
-    console.log(offset)
     
     if(page) {
       const updatedAllListingsURI =`https://api.yelp.com/v3/businesses/search?term=noodles&location=Singapore&limit=20&offset=${offset}`;
