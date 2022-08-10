@@ -1,5 +1,33 @@
 <%- include('../partials/header'); %>
 
+<nav aria-label="Page navigation example">
+  <ul class="flex flex-wrap justify-center mt-5">
+    <% if (page > 1) { %>
+      <li>
+        <a href="/food?page=<%= page - 1 %>" class="py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700">Previous</a>
+      </li>
+    <% } %> 
+
+    <% pageArray.forEach(p => { %>
+      <% if (page === p) { %>
+        <li>
+          <a href="/food?page=<%= p %>" aria-current="page" class="py-2 px-3 text-red-600 bg-red-50 border border-gray-300 hover:bg-red-100 hover:text-blue-700"><%= p %></a>
+        </li>
+      <% } else { %>
+        <li>
+          <a href="/food?page=<%= p %>" class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"><%= p %></a>
+        </li>
+      <% } %>
+    <% }) %> 
+
+    <% if (page < 50) { %>
+      <li>
+        <a href="/food?page=<%= page + 1 %>" class="py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700">Next</a>
+      </li>
+    <% }%> 
+  </ul>
+</nav>
+
 <div class="flex flex-wrap justify-center mt-5">
 <% foodListings.forEach(l => { %>
   <% const yelpStarPercentage = `${(l.rating/ 5) * 100}%`; %> 

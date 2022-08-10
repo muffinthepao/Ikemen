@@ -171,7 +171,7 @@ const controller = {
 
     } catch (err) {
       console.log(err)
-      res.send("cannot edit review right now")
+      res.send("cannot edit review right now")``
     }
   },
 
@@ -179,25 +179,22 @@ const controller = {
     const listingID = req.params.listing_id;
     const reviewID = req.params.review_id;
 
-    console.log(reviewID)
-
-    // try {
-    //   await reviewModel.findByIdAndDelete(reviewID);
-    //   await listingModel.findOneAndUpdate({yelpID: listingID}, {
-    //       $pull: {
-    //           reviews: reviewID
-    //       },
-    //       $inc: {
-    //         reviewCount: -1
-    //       },
-    //   });
-    //   res.redirect(`/food/${listingID}`);
+    try {
+      await reviewModel.findByIdAndDelete(reviewID);
+      await listingModel.findOneAndUpdate({yelpID: listingID}, {
+          $pull: {
+              reviews: reviewID
+          },
+          $inc: {
+            reviewCount: -1
+          },
+      });
 
 
-    // } catch (err) {
-    //   console.log(err)
-    //   res.send("cannot delete review at the moment. please try again later")
-    // }
+    } catch (err) {
+      console.log(err)
+      res.send("cannot delete review at the moment. please try again later")
+    }
   }
 };
 
