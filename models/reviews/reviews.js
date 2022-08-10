@@ -22,6 +22,11 @@ const reviewSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
     default: false
+  },
+
+  yelpID: {
+    type: String,
+    required: true
   }
 });
 

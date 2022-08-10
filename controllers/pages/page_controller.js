@@ -42,6 +42,8 @@ const controller = {
             select: "fullName preferredName email"
         }])
 
+        console.log(allIkemenReviews)
+
         res.render("./pages/listing.ejs", {
           listing,
           listingID,

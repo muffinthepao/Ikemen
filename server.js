@@ -7,7 +7,7 @@ const session = require("express-session");
 
 const hour = 3_600_000;
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 const mongoConnectionStr = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PW}@generalassembly.ljkj0.mongodb.net/?retryWrites=true&w=majority`;
 
 //controllers
@@ -42,7 +42,7 @@ app.get("/food/:listing_id", pageController.showIndividualListing);
 app.post("/food/:listing_id/review", authMiddleware.isAuthenticated ,reviewController.submitReview);
 app.get("/food/:listing_id/review/:review_id", authMiddleware.isAuthenticated ,reviewController.showReview);
 app.put("/food/:listing_id/review/:review_id/edit", authMiddleware.isAuthenticated ,reviewController.editReview);
-app.delete("/food/:listing_id/review/:review_id", authMiddleware.isAuthenticated ,reviewController.deleteReview);
+app.delete("/food/:listing_id/review/:review_id/", authMiddleware.isAuthenticated ,reviewController.deleteReview);
 
 
 //authentication routes
