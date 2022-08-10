@@ -89,6 +89,10 @@ const controller = {
       errorObject,
     });
   },
+
+  surprise: (req, res) => {
+    res.render('./pages/surprise.ejs')
+  }
 };
 
 module.exports = controller;

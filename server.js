@@ -37,7 +37,7 @@ app.use(authMiddleware.setAuthUserVar)
 app.get("/", pageController.showHome);
 app.get("/food", pageController.showListings);
 app.get("/food/:listing_id", pageController.showIndividualListing);
-// app.get("/surprise", pageController.surprise);
+app.get("/surprise", pageController.surprise);
 
 //review routes
 app.post("/food/:listing_id/review", authMiddleware.isAuthenticated ,reviewController.submitReview);
