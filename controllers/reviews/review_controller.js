@@ -98,7 +98,6 @@ const controller = {
     const listingID = req.params.listing_id;
     const reviewID = req.params.review_id;
 
-    // console.log("req:", req)
     let errorObject = {};
 
     try {
