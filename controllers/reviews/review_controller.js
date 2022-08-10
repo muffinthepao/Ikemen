@@ -98,7 +98,6 @@ const controller = {
     const listingID = req.params.listing_id;
     const reviewID = req.params.review_id;
 
-    console.log("reviewID: ", reviewID)
     // console.log("req:", req)
     let errorObject = {};
 
@@ -174,8 +173,30 @@ const controller = {
       console.log(err)
       res.send("cannot edit review right now")
     }
-  }
+  },
 
+  deleteReview: async (req, res) => {
+    const listingID = req.params.listing_id;
+    const reviewID = req.params.review_id;
+
+    try {
+      await reviewModel.findByIdAndDelete(reviewID);
+      await listingModel.findOneAndUpdate({yelpID: listingID}, {
+          $pull: {
+              reviews: reviewID
+          },
+          $inc: {
+            reviewCount: -1
+          },
+      });
+      res.redirect(`/food/${listingID}`);
+
+
+    } catch (err) {
+      console.log(err)
+      res.send("cannot delete review at the moment. please try again later")
+    }
+  }
 };
 
 module.exports = controller;

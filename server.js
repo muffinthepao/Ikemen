@@ -42,6 +42,7 @@ app.get("/food/:listing_id", pageController.showIndividualListing);
 app.post("/food/:listing_id/review", authMiddleware.isAuthenticated ,reviewController.submitReview);
 app.get("/food/:listing_id/review/:review_id", authMiddleware.isAuthenticated ,reviewController.showReview);
 app.put("/food/:listing_id/review/:review_id/edit", authMiddleware.isAuthenticated ,reviewController.editReview);
+app.delete("/food/:listing_id/review/:review_id", authMiddleware.isAuthenticated ,reviewController.deleteReview);
 
 
 //authentication routes
