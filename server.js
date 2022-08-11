@@ -7,7 +7,7 @@ const session = require("express-session");
 
 const hour = 3_600_000;
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 const mongoConnectionStr = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PW}@generalassembly.ljkj0.mongodb.net/?retryWrites=true&w=majority`;
 
 //controllers
