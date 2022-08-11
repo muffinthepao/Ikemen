@@ -9,8 +9,6 @@ const userModel = require("../../models/authentication/users");
 
 const controller = {
   showHome: (req, res) => {
-    res.locals.firstName = "hello";
-    res.locals.lastName = "world";
     res.render("./pages/home.ejs");
   },
 
@@ -86,9 +84,36 @@ const controller = {
     });
   },
 
-  surprise: (req, res) => {
-    res.render('./pages/surprise.ejs')
-  }
+  showSurprise: (req, res) => {
+    const surprise  = null
+    const surpriseDbEntry= null
+
+    res.render('./pages/surprise.ejs', {surprise, surpriseDbEntry})
+  },
+
+  randomListing: async (req, res) => {
+
+    const page = Math.floor(Math.random()* 50)
+    const limit = 20
+    const offset = (page - 1) * limit
+
+    const randomListingsURI =`https://api.yelp.com/v3/businesses/search?term=noodles&location=Singapore&limit=20&offset=${offset}`;
+
+    const listOfFood = await yelpAPI(randomListingsURI);
+    const foodListings = listOfFood.businesses;
+
+    const randomListing = Math.floor(Math.random()* limit)
+
+    let surprise = foodListings[randomListing]
+
+    let surpriseDbEntry = await listingModel.findOne({yelpID: surprise.id})
+
+    res.render('./pages/surprise.ejs', {surprise, surpriseDbEntry} )
+
+  },
+
+
+
 };
 
 module.exports = controller;

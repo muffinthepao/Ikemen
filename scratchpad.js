@@ -1,13 +1,3 @@
-wow =[
-  {
-    name: "a",
-    email: "a@a.com"
-  },
-  {
-    name: "b",
-    email: "b@b.com"
-  },
-
-]
+wow =[a, b, c, d, e, f, g, h, i]
 
 console.log(wow.find(x => x.email == "a@a.com"))
