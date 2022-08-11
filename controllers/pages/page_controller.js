@@ -72,10 +72,6 @@ const controller = {
           path: "user",
           select: "fullName preferredName email",
         },
-        // {
-        //   path: "reviews",
-          
-        // },
       ]);
 
     console.log(allIkemenReviews);
