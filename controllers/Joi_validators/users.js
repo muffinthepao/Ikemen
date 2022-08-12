@@ -35,6 +35,14 @@ const validators = {
       .label("Email")
       .required(),
   }),
+
+  changePasswordValidator: Joi.object({
+    currentPassword: Joi.string().label("Current Password").required(),
+    newPassword: Joi.string().min(3).label("New Password").required(),
+    confirmNewPassword: Joi.any().valid(Joi.ref("newPassword")).required().messages({
+      "any.only": '"Passwords" must match',
+    }),
+  }),
 };
 
 module.exports = validators;

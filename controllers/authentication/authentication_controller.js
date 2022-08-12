@@ -156,7 +156,7 @@ const controller = {
                     return
                 }
                 
-                res.redirect('/')
+                res.redirect('/login')
             })
         })
   }

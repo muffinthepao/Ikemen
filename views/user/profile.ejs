@@ -46,7 +46,7 @@
   </div>
   </aside>  
 
-      <form id="user-form" class="lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg p-8 flex flex-col w-full mt-10 md:mt-0" method="POST" action="/user/profile/edit?_method=PUT">
+      <form id="user-change-details-form" class="lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg p-8 flex flex-col w-full mt-10 md:mt-0" method="POST" action="/user/profile/edit?_method=PUT">
 
         <h2 class="text-gray-900 text-lg font-medium title-font mb-5">User Details</h2>
 
@@ -85,35 +85,35 @@
         <button class="text-white bg-red-500 border-0 py-2 px-8 focus:outline-none hover:bg-red-600 rounded text-lg">Update Details</button>
       </form>
 
-      <form id="user-form" class="lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg p-8 flex flex-col w-full mt-10 md:mt-0" method="POST" action="/register">
+      <form id="user-change-password-form" class="lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg p-8 flex flex-col w-full mt-10 md:mt-0" method="POST" action="/user/profile/changepassword?_method=PUT">
 
         <h2 class="text-gray-900 text-lg font-medium title-font mb-5">Password</h2>
   
         <div class="relative mb-4">
-          <label for="email" class="leading-7 text-sm text-gray-600">Current Password</label>
-          <input type="email" id="email" name="email" class="w-full bg-white rounded border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-          <% if(errorObject.email) { %>
+          <label for="currentPassword" class="leading-7 text-sm text-gray-600">Current Password</label>
+          <input type="password" id="currentPassword" name="currentPassword" class="w-full bg-white rounded border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+          <% if(errorObject.currentPassword) { %>
             <p class="text-xs text-red-600 -mb-5">
-              <%= errorObject.email %>
+              <%= errorObject.currentPassword %>
             </p>
           <% } %>
         </div>
           <div class="flex-1">
-            <label for="password" class="leading-7 text-sm text-gray-600">New Password</label>
-            <input type="password" id="password" name="password" class="w-full bg-white rounded border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-            <% if(errorObject.password) { %>
+            <label for="newPassword" class="leading-7 text-sm text-gray-600">New Password</label>
+            <input type="password" id="newPassword" name="newPassword" class="w-full bg-white rounded border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+            <% if(errorObject.newPassword) { %>
               <p class="text-xs text-red-600 -mb-3">
-                <%= errorObject.password %>
+                <%= errorObject.newPassword %>
               </p>
             <% } %>
           </div>
   
           <div class="flex-1">
-            <label for="confirmPassword" class="leading-7 text-sm text-gray-600">Confirm New Password</label>
-            <input type="password" id="confirmPassword" name="confirmPassword" class="w-full bg-white rounded border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-            <% if(errorObject.confirmPassword) { %>
+            <label for="confirmNewPassword" class="leading-7 text-sm text-gray-600">Confirm New Password</label>
+            <input type="password" id="confirmNewPassword" name="confirmNewPassword" class="w-full bg-white rounded border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+            <% if(errorObject.confirmNewPassword) { %>
               <p class="text-xs text-red-600">
-                <%= errorObject.confirmPassword %>
+                <%= errorObject.confirmNewPassword %>
               </p>
             <% } %>
           </div>
