@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt')
 const userModel = require('../../models/authentication/users')
-const userValidators = require('../Joi validators/users')
+const userValidators = require('../Joi_validators/users')
 
 const controller = {
 

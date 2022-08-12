@@ -9,6 +9,18 @@ body {
     padding: 0;
 }
 
+#page-home {
+    height: calc(100vh - 160px);
+}
+
+#homepage-cover {
+    height: 100%;
+    background: url(./img/ramen.jpeg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-top: 80px;
+}
+
 #map {
     width: 300px;
     height: 400px

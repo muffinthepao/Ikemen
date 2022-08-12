@@ -61,6 +61,7 @@ app.post("/logout", authController.logout);
 
 //user routes
 app.get("/user/profile", userController.showProfile);
+app.put("/user/profile/edit", userController.updateUserDetails);
 
 app.listen(port, async () => {
   try {

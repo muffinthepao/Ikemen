@@ -22,6 +22,19 @@ const validators = {
     email: Joi.string().email().label("Email").required(),
     password: Joi.string().label("Password").required(),
   }),
+
+  updateDetailsValidator: Joi.object({
+    fullName: Joi.string().min(3).max(140).label("Full Name").required(),
+    preferredName: Joi.string()
+      .min(3)
+      .max(60)
+      .label("Preferred Name")
+      .required(),
+    email: Joi.string()
+      .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+      .label("Email")
+      .required(),
+  }),
 };
 
 module.exports = validators;

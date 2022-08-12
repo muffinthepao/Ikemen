@@ -7,8 +7,8 @@ const listingModel = require("../../models/listings/listings");
 const reviewModel = require("../../models/reviews/reviews");
 const saveModel = require("../../models/saves/saves");
 
-const listingsValidator = require("../Joi validators/listings");
-const reviewsValidator = require("../Joi validators/reviews");
+const listingsValidator = require("../Joi_validators/listings");
+const reviewsValidator = require("../Joi_validators/reviews");
 
 const controller = {
   saveListing: async (req, res) => {
