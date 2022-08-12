@@ -7,8 +7,8 @@ const listingModel = require("../../models/listings/listings");
 const reviewModel = require("../../models/reviews/reviews");
 const saveModel = require("../../models/saves/saves");
 
-const listingsValidator = require("../validators/listings");
-const reviewsValidator = require("../validators/reviews");
+const listingsValidator = require("../Joi validators/listings");
+const reviewsValidator = require("../Joi validators/reviews");
 
 const controller = {
   submitReview: async (req, res) => {
@@ -16,7 +16,10 @@ const controller = {
     let errorObject = {};
 
     //Joi validation
-    const reviewValidationResults = reviewsValidator.reviewValidator.validate(req.body, { abortEarly: false });
+    const reviewValidationResults = reviewsValidator.reviewValidator.validate(
+      req.body,
+      { abortEarly: false }
+    );
 
     if (reviewValidationResults.error) {
       const validationError = reviewValidationResults.error.details;
@@ -32,14 +35,18 @@ const controller = {
       const listing = await yelpAPI(listingCall);
       const listingLocation = listing.location;
 
-      //Yelp Reviews. Max of 3 reviews. Yelp API limitation. 
-      const yelpReviews = await yelpAPI(`${listingCall}/reviews`)
-      const allYelpReviews = yelpReviews.reviews
+      //Yelp Reviews. Max of 3 reviews. Yelp API limitation.
+      const yelpReviews = await yelpAPI(`${listingCall}/reviews`);
+      const allYelpReviews = yelpReviews.reviews;
 
-      const allIkemenReviews = await reviewModel.find({yelpID: listingID}).populate([{
-        path: "user",
-        select: "fullName preferredName email"
-      }])
+      const allIkemenReviews = await reviewModel
+        .find({ yelpID: listingID })
+        .populate([
+          {
+            path: "user",
+            select: "fullName preferredName email",
+          },
+        ]);
 
       res.render("./pages/listing.ejs", {
         listing,
@@ -49,43 +56,43 @@ const controller = {
         allYelpReviews,
         errorObject,
       });
-      return
+      return;
     }
 
     const reviewValidated = reviewValidationResults.value;
 
     let user = await userModel.findOne({ email: req.session.user });
 
-    const duplicate = await reviewModel.findOne({email: req.session.user, yelpID: listingID})
+    // const duplicate = await reviewModel.findOne({email: req.session.user, yelpID: listingID})
 
-    if (duplicate) {
-      let errorObject = {duplicate: "cannot have more than 1 review per listing"}
-      const listingID = req.params.listing_id;
-      const listingCall = `${yelpAPIBase}/${listingID}`;
+    // if (duplicate) {
+    //   let errorObject = {duplicate: "cannot have more than 1 review per listing"}
+    //   const listingID = req.params.listing_id;
+    //   const listingCall = `${yelpAPIBase}/${listingID}`;
 
-      //Individual Listing
-      const listing = await yelpAPI(listingCall);
-      const listingLocation = listing.location;
+    //   //Individual Listing
+    //   const listing = await yelpAPI(listingCall);
+    //   const listingLocation = listing.location;
 
-      //Yelp Reviews. Max of 3 reviews. Yelp API limitation. 
-      const yelpReviews = await yelpAPI(`${listingCall}/reviews`)
-      const allYelpReviews = yelpReviews.reviews
+    //   //Yelp Reviews. Max of 3 reviews. Yelp API limitation.
+    //   const yelpReviews = await yelpAPI(`${listingCall}/reviews`)
+    //   const allYelpReviews = yelpReviews.reviews
 
-      const allIkemenReviews = await reviewModel.find({yelpID: listingID}).populate([{
-        path: "user",
-        select: "fullName preferredName email"
-      }])
+    //   const allIkemenReviews = await reviewModel.find({yelpID: listingID}).populate([{
+    //     path: "user",
+    //     select: "fullName preferredName email"
+    //   }])
 
-      res.render("./pages/listing.ejs", {
-        listing,
-        listingID,
-        listingLocation,
-        allIkemenReviews,
-        allYelpReviews,
-        errorObject,
-      });
-      return
-    }
+    //   res.render("./pages/listing.ejs", {
+    //     listing,
+    //     listingID,
+    //     listingLocation,
+    //     allIkemenReviews,
+    //     allYelpReviews,
+    //     errorObject,
+    //   });
+    //   return
+    // }
 
     //create review document in db
     try {
@@ -93,32 +100,35 @@ const controller = {
         content: reviewValidated.content,
         rating: reviewValidated.rating,
         user: user._id,
-        yelpID: listingID
+        yelpID: listingID,
       });
 
-      const listing = await listingModel.findOne({ yelpID: listingID })
+      const listing = await listingModel.findOne({ yelpID: listingID });
 
-      if (listing){
-        const updateListing = await listingModel.findOneAndUpdate({ yelpID: listingID },
+      if (listing) {
+        const updateListing = await listingModel.findOneAndUpdate(
+          { yelpID: listingID },
           {
             $push: {
               reviews: review._id,
             },
-            avgRating: ((listing.avgRating * listing.reviewCount) + review.rating) / (listing.reviewCount + 1),
+            avgRating:
+              (listing.avgRating * listing.reviewCount + review.rating) /
+              (listing.reviewCount + 1),
             $inc: {
-              reviewCount: 1
-            }
+              reviewCount: 1,
+            },
           }
         );
       }
-      
-      if (!listing){
+
+      if (!listing) {
         const newListing = await listingModel.create({
           yelpID: listingID,
           avgRating: review.rating,
           reviews: [review._id],
-          reviewCount: 1
-        })
+          reviewCount: 1,
+        });
       }
 
       res.redirect(`/food/${listingID}`);
@@ -135,30 +145,28 @@ const controller = {
     let errorObject = {};
 
     try {
-      
       //get listing info
       const listingCall = `${yelpAPIBase}/${listingID}`;
       const listing = await yelpAPI(listingCall);
-  
-      //get review info
-      const review = await reviewModel.findById(reviewID).populate('user')
-          // {
-          //   path: "user",
-          //   select: "fullName preferredName email",
-          // },
-        // ]);
 
-      res.render('./pages/edit_review.ejs', {
+      //get review info
+      const review = await reviewModel.findById(reviewID).populate("user");
+      // {
+      //   path: "user",
+      //   select: "fullName preferredName email",
+      // },
+      // ]);
+
+      res.render("./pages/edit_review.ejs", {
         errorObject,
         listing,
         listingID,
         review,
-        reviewID
-      })
-
+        reviewID,
+      });
     } catch (err) {
-      console.log(err)
-      res.send("cannot edit review right now")
+      console.log(err);
+      res.send("cannot edit review right now");
     }
   },
 
@@ -173,13 +181,16 @@ const controller = {
       const listing = await yelpAPI(listingCall);
 
       //get review info
-      const review = await reviewModel.findById(reviewID).populate("user")
+      const review = await reviewModel.findById(reviewID).populate("user");
 
-      if(!review) {
-        res.redirect(`/food/${listingID}`)
+      if (!review) {
+        res.redirect(`/food/${listingID}`);
       }
 
-      const reviewValidationResults = reviewsValidator.reviewValidator.validate(req.body, { abortEarly: false });
+      const reviewValidationResults = reviewsValidator.reviewValidator.validate(
+        req.body,
+        { abortEarly: false }
+      );
 
       if (reviewValidationResults.error) {
         const validationError = reviewValidationResults.error.details;
@@ -187,14 +198,14 @@ const controller = {
           errorObject[errorMessage.context.key] = errorMessage.message;
         });
 
-        res.render('./pages/edit_review.ejs', {
+        res.render("./pages/edit_review.ejs", {
           listing,
           listingID,
           review,
           reviewID,
-          errorObject
-        })
-        return
+          errorObject,
+        });
+        return;
       }
 
       const reviewValidated = reviewValidationResults.value;
@@ -203,14 +214,13 @@ const controller = {
         content: reviewValidated.content,
         rating: reviewValidated.rating,
         edited: true,
-        updated: new Date()
-      })
+        updated: new Date(),
+      });
 
-      res.redirect(`/food/${listingID}`)
-
+      res.redirect(`/food/${listingID}`);
     } catch (err) {
-      console.log(err)
-      res.send("cannot edit review right now")``
+      console.log(err);
+      res.send("cannot edit review right now")``;
     }
   },
 
@@ -218,70 +228,39 @@ const controller = {
     const listingID = req.params.listing_id;
     const reviewID = req.params.review_id;
 
+    const dbListing = await listingModel.findOne({ yelpID: listingID });
+    const reviewCount = dbListing.reviewCount
+    const currentTotal = dbListing.avgRating * reviewCount;
+
+    const dbReview = await reviewModel.findOne({ yelpID: listingID });
+    const reviewRating = dbReview.rating;
+
+    const avgRating = (currentTotal - reviewRating) / (reviewCount)
+
+
+    console.log(reviewRating)
+    console.log(reviewCount)
+
     try {
       await reviewModel.findByIdAndDelete(reviewID);
-      await listingModel.findOneAndUpdate({yelpID: listingID}, {
+      await listingModel.findOneAndUpdate({ yelpID: listingID },
+        {
           $pull: {
-              reviews: reviewID
+            reviews: reviewID,
           },
           $inc: {
-            reviewCount: -1
+            reviewCount: -1,
           },
-      });
-
-      res.redirect(`/food/${listingID}`)
-
-    } catch (err) {
-      console.log(err)
-      res.send("cannot delete review at the moment. please try again later")
-    }
-  },
-
-  saveReview: async (req, res) => {
-    const listingID = req.params.listing_id
-    let user = await userModel.findOne({ email: req.session.user });
-
-    try {
-      const save = await saveModel.create({
-        user: user._id,
-        yelpID: listingID
-      });
-
-      const listing = await listingModel.findOne({ yelpID: listingID })
-
-      if (listing){
-        const updateListing = await listingModel.findOneAndUpdate({ yelpID: listingID },
-          {
-            $push: {
-              saves: save._id,
-            },
-            $inc: {
-              saveCount: 1
-            }
-          }
-        );
-      }
-      
-      if (!listing){
-        const newListing = await listingModel.create({
-          yelpID: listingID,
-          avgRating: review.rating,
-          saves: [save._id],
-          saveCount: 1
-        })
-      }
+          avgRating: avgRating,
+        },
+      );
 
       res.redirect(`/food/${listingID}`);
     } catch (err) {
       console.log(err);
-      res.send("cannot save review");
+      res.send("cannot delete review at the moment. please try again later");
     }
   },
-
-  // deleteSavedReview: async (req, res) => {
-  //   const listingID = req.params.listing_id;
-  //   const reviewID = req.params.review_id;
-  // }
 };
 
 module.exports = controller;

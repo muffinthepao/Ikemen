@@ -10,6 +10,7 @@ const listingSchema = new mongoose.Schema({
   avgRating: {
     type: Number,
     required: true,
+    default: 0
   },
 
   reviews: [{

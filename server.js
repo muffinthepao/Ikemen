@@ -12,10 +12,12 @@ const mongoConnectionStr = `mongodb+srv://${process.env.MONGO_USER}:${process.en
 
 //controllers
 const authController = require("./controllers/authentication/authentication_controller");
-const pageController = require("./controllers/pages/page_controller");
-const userController = require("./controllers/users/user_controller");
-const reviewController = require("./controllers/reviews/review_controller");
 const authMiddleware = require("./middlewares/auth_middleware");
+const pageController = require("./controllers/pages/page_controller");
+const reviewController = require("./controllers/reviews/review_controller");
+const savesController = require("./controllers/saves/saves_controller");
+
+const userController = require("./controllers/users/user_controller");
 
 //Set view engine
 app.set("view engine", "ejs");
@@ -33,7 +35,7 @@ app.use(session({ //creates a session each time you access the page
 app.use(authMiddleware.setAuthUserVar)
 
 
-//page routes
+//listing routes
 app.get("/", pageController.showHome);
 app.get("/food", pageController.showListings);
 app.get("/food/:listing_id", pageController.showIndividualListing);
@@ -45,8 +47,10 @@ app.post("/food/:listing_id/review", authMiddleware.isAuthenticated ,reviewContr
 app.get("/food/:listing_id/review/:review_id", authMiddleware.isAuthenticated ,reviewController.showReview);
 app.put("/food/:listing_id/review/:review_id/edit", authMiddleware.isAuthenticated ,reviewController.editReview);
 app.delete("/food/:listing_id/review/:review_id/", authMiddleware.isAuthenticated ,reviewController.deleteReview);
-app.post("/food/:listing_id/save", authMiddleware.isAuthenticated ,reviewController.saveReview);
 
+//save routes
+app.post("/food/:listing_id/save", authMiddleware.isAuthenticated , savesController.saveListing);
+app.delete("/food/:listing_id/delete", authMiddleware.isAuthenticated , savesController.deleteSavedListing)
 
 //authentication routes
 app.get("/register", authController.showRegistrationForm);

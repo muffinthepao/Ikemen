@@ -10,9 +10,9 @@ body {
 }
 
 #map {
-    height: 80vh;
+    width: 300px;
+    height: 400px
 }
-
 .marker {
     background-image: url('/img/marker.png')
 }

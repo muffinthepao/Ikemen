@@ -17,29 +17,37 @@
           <div class="flex flex-col items-center text-center justify-center">
             <h2 class="font-medium title-font mt-4 text-gray-900 text-3xl"><%= listing.name %></h2>
             <div class="w-12 h-1 bg-red-500 rounded mt-2 mb-4"></div>
-            <form id="review-form" method="POST" action="/food/<%= listingID %>/save">
-              <button type="submit" class="inline-flex items-center py-2.5 px-12 text-xs font-medium text-center text-black border border-gray-500 bg-white-500 rounded-lg hover:bg-red-800 hover:text-white focus:ring-4 focus:ring-blue-200">
-                Save
-              </button>
-            </form>
-            <button type="submit" class="inline-flex items-center py-2.5 px-11 text-xs font-medium text-center text-white bg-red-500 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-blue-200">
-              Saved!
-            </button>
-            <div>
+            <% if (!authUser || !savedListing) {%> 
+              <form id="save-listing-form" method="POST" action="/food/<%= listingID %>/save">
+                <button type="submit" class="inline-flex items-center py-2.5 px-12 text-xs font-medium text-center text-black border border-gray-500 bg-white-500 rounded-lg hover:bg-red-800 hover:text-white focus:ring-4 focus:ring-blue-200">
+                  Save
+                </button>
+              </form>
+            <% } else { %>
+              <form id="delete-listing-form" method="POST" action="/food/<%= listingID %>/delete?_method=DELETE">
+                <button type="submit" class="inline-flex items-center py-2.5 px-11 text-xs font-medium text-center text-white bg-red-500 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-blue-200">
+                  Saved!
+                </button>
+              </form>
+            <% } %>
+            <a href="https://www.google.com/maps/search/?api=1&query=<%= listing.name %>%20singapore" target="_blank" rel="noopener noreferrer">
+            
               <h3 class="font-small title-font mt-4 text-gray-900 text-lg">Address</h3>
               <p class="text-base"><%= listingLocation.address1 %>,</p>
               <p class="text-base"><%= listingLocation.address2 %>,</p>
               <p class="text-base">Singapore <%= listingLocation.zip_code %></p>
-            </div>
+            </a>
+
+            <a href="https://www.google.com/maps/dir/?api=1&destination=<%= listing.name %>" target="_blank" rel="noopener noreferrer" class="mt-4">
+              <button type="submit" class="inline-flex items-center py-2.5 px-11 text-xs font-medium text-center text-white bg-red-500 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-blue-200">
+                Directions
+              </button>
+            </a>
+
+            <div id='map'></div>
           </div>
         </div>
         <div class="sm:w-2/3 sm:pl-8 sm:py-8 sm:border-l border-gray-200 sm:border-t-0 border-t mt-4 pt-4 sm:mt-0 text-center sm:text-left">
-          <!-- <p class="leading-relaxed text-lg mb-4">Meggings portland fingerstache lyft, post-ironic fixie man bun banh mi umami everyday carry hexagon locavore direct trade art party. Locavore small batch listicle gastropub farm-to-table lumbersexual salvia messenger bag. Coloring book flannel truffaut craft beer drinking vinegar sartorial, disrupt fashion axe normcore meh butcher. Portland 90's scenester vexillologist forage post-ironic asymmetrical, chartreuse disrupt butcher paleo intelligentsia pabst before they sold out four loko. 3 wolf moon brooklyn.</p>
-          <a class="text-red-500 inline-flex items-center">Learn More
-            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
-              <path d="M5 12h14M12 5l7 7-7 7"></path>
-            </svg>
-          </a> -->
           <form id="review-form" method="POST" action="/food/<%= listingID %>/review">
             <div class="mb-5 w-full bg-gray-50 rounded-lg border border-gray-200">
                 <div class="py-2 px-4 bg-white rounded-t-lg">
@@ -85,14 +93,14 @@
             </div>
           </form>
           <div id="ikemen-reviews">  
-              <% allIkemenReviews.forEach(i => { %>
-                <% const ikemenUserRatingPercentage  = (i.rating/ 5) * 100 %>
-                <% if (i.yelpID === listingID) { %>
+              <% allIkemenReviews.forEach(ikemenReview => { %>
+                <% const ikemenUserRatingPercentage  = (ikemenReview.rating/ 5) * 100 %>
+                <% if (ikemenReview.yelpID === listingID) { %>
 
                   <div class="border-b pb-10 mb-10 border-gray-200">
                     <div class="h-full flex items-center border-gray-200">
-                      <% if (i.user.profilePic) { %>
-                        <img alt="team" class="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4" src="<%= i.user.profilePic %>">
+                      <% if (ikemenReview.user.profilePic) { %>
+                        <img alt="team" class="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4" src="<%= ikemenReview.user.profilePic %>">
                       <% } else { %>
                         <img alt="team" class="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4" src="https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-PNG.png">
                       <% } %>
@@ -103,28 +111,28 @@
                         </svg>
                       </div> -->
                       <div class="flex-grow">
-                        <h2 class="text-gray-900 title-font font-medium"><%= i.user.fullName %></h2>
+                        <h2 class="text-gray-900 title-font font-medium"><%= ikemenReview.user.fullName %></h2>
                       </div>
                     </div>
                     <div class="flex items-center mt-2.5 mb-5">
                       <svg aria-hidden="true" class="w-5 h-5 text-yellow-300 dark:text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Fifth star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                      <p class="ml-2 text-sm font-medium text-gray-900"><%= i.rating %> / 5</p>
+                      <p class="ml-2 text-sm font-medium text-gray-900"><%= ikemenReview.rating %> / 5</p>
                       <span class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded ml-3">IKEMEN</span>
                     </div>
-                    <p class="leading-relaxed"><%= i.content %></p>
-                    <% if (i.createdAt = i.updatedAt) { %>
-                      <p class="mt-1 text-xs text-gray-500 dark:text-gray-400"><%= i.createdAt.toDateString()%></p>
+                    <p class="leading-relaxed"><%= ikemenReview.content %></p>
+                    <% if (ikemenReview.createdAt == ikemenReview.updatedAt) { %>
+                      <p class="mt-1 text-xs text-gray-500 dark:text-gray-400"><%= ikemenReview.createdAt.toDateString()%></p>
                     <% } %>
-                    <% if( i.createdA < i.updatedAt) {%> 
-                      <p class="mt-1 text-xs text-gray-500 dark:text-gray-400"><%= i.updatedAt.toDateString() %>(edited)</p>
+                    <% if( ikemenReview.createdA !== ikemenReview.updatedAt) {%> 
+                      <p class="mt-1 text-xs text-gray-500 dark:text-gray-400"><%= ikemenReview.updatedAt.toDateString() %>(edited)</p>
                     <% } %>
     
                     <aside>
                       <div class="flex items-center mt-3 space-x-3 divide-x divide-gray-200">
-                        <% if (i.user.email === authUser) { %>
-                          <a href="/food/<%= listingID %>/review/<%=i._id%>" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-xs px-2 py-1.5">Edit</a>
+                        <% if (ikemenReview.user.email === authUser) { %>
+                          <a href="/food/<%= listingID %>/review/<%=ikemenReview._id%>" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-xs px-2 py-1.5">Edit</a>
                           <!-- <a href="#" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-xs px-2 py-1.5">Delete</a> -->
-                          <button class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-xs px-2 py-1.5" type="button" data-modal-toggle="popup-modal">
+                          <button class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-xs px-2 py-1.5" type="button" data-modal-toggle="popup-modal-<%=ikemenReview._id%>">
                             Delete
                           </button>
                         <% } else { %> 
@@ -132,25 +140,25 @@
                         <% } %>  
                           <!-- <a href="#" class="pl-4 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">Report abuse</a> -->
                       </div>
-                  </aside>
+                    </aside>
                   </div>
 
-                  <div id="popup-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 md:inset-0 h-modal md:h-full">
+                  <div id="popup-modal-<%=ikemenReview._id%>" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 md:inset-0 h-modal md:h-full">
                     <div class="relative p-4 w-full max-w-md h-full md:h-auto">
                         <div class="relative bg-white rounded-lg shadow">
-                            <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="popup-modal">
+                            <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="popup-modal-<%=ikemenReview._id%>">
                                 <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                                 <span class="sr-only">Close modal</span>
                             </button>
                             <div class="p-6 text-center">
                                 <svg aria-hidden="true" class="mx-auto mb-4 w-14 h-14 text-gray-400 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete your review? <br></h3>
-                                <form method="POST" action="/food/<%= listingID %>/review/<%=i._id%>?_method=DELETE">
+                                <form method="POST" action="/food/<%= listingID %>/review/<%=ikemenReview._id%>?_method=DELETE">
                                     <button type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
                                         Yes, I'm sure
                                     </button>
                                 </form>
-                                <button data-modal-toggle="popup-modal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">No, cancel</button>
+                                <button data-modal-toggle="popup-modal-<%=ikemenReview._id%>" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">No, cancel</button>
                             </div>
                         </div>
                     </div>
@@ -160,23 +168,22 @@
               <% }) %>
           </div>
 
-          <% allYelpReviews.forEach(r => { %>
-            <% const yelpUserRatingPercentage = `${(r.rating/ 5) * 100}%`; %>
+          <% allYelpReviews.forEach(yelpReview => { %>
             <div class="border-b pb-10 mb-10 border-gray-200">
               <!-- <h1 class="text-gray-900 text-3xl title-font font-medium mb-1">The Catcher in the Rye</h1> -->
               <div class="h-full flex items-center border-gray-200">
-                <img alt="team" class="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4" src="<%= r.user.image_url %>">
+                <img alt="team" class="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4" src="<%=yelpReview.user.image_url %>">
                 <div class="flex-grow">
-                  <h2 class="text-gray-900 title-font font-medium"><%= r.user.name %></h2>
+                  <h2 class="text-gray-900 title-font font-medium"><%=yelpReview.user.name %></h2>
                   <!-- <p class="text-gray-500">UI Designer</p> -->
                 </div>
               </div>
               <div class="flex items-center mt-2.5 mb-5">
                 <svg aria-hidden="true" class="w-5 h-5 text-yellow-300 dark:text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Fifth star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                <p class="ml-2 text-sm font-medium text-gray-900"><%= r.rating %> / 5</p>
+                <p class="ml-2 text-sm font-medium text-gray-900"><%=yelpReview.rating %> / 5</p>
                 <span class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded ml-3">YELP</span>
               </div>
-              <p class="leading-relaxed"><%= r.text %> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+              <p class="leading-relaxed"><%=yelpReview.text %> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             </div>
 
           <% }) %>
@@ -184,5 +191,41 @@
     </div>
   </div>
 </section>
+
+<script>
+  let long = listing.coordinates.longitude;
+  let lat = listing.coordinates.latitude;
+  let singaporeLngLat = [long, lat];
+  
+  mapboxgl.accessToken =
+    "pk.eyJ1IjoiZ3VuZHVzdGFuIiwiYSI6ImNsNjdubmYzNzA1MDgza3FoaWxoaXhlaTkifQ.1C5TzAc0lhTVxr2q3yedbg";
+  
+  navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
+    enableHighAccuracy: true,
+  });
+  
+  function successLocation(position) {
+    console.log(position);
+    setupMap([position.coords.longitude, position.coords.latitude]);
+  }
+  
+  function errorLocation(position) {
+    setupMap([-2.24, 53.48]);
+  }
+  
+  function setupMap(center) {
+    const map = new mapboxgl.Map({
+      container: "map",
+      style: "mapbox://styles/mapbox/streets-v11",
+      center: singaporeLngLat,
+      zoom: 11,
+    });
+  
+  const marker2 = new mapboxgl.Marker({ color: 'red'})
+  .setLngLat(singaporeLngLat)
+  .addTo(map);
+  }
+  
+  </script>
 
 <%- include('../partials/footer'); %>

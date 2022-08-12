@@ -13,6 +13,7 @@ module.exports = {
 
     if (req.session.user) {
       res.locals.authUser = req.session.user
+
     }
     next()
   },

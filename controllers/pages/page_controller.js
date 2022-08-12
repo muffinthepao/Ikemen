@@ -51,7 +51,7 @@ const controller = {
   },
 
   showIndividualListing: async (req, res) => {
-    let errorObject = {};
+    const errorObject = {};
 
     const listingID = req.params.listing_id;
     const listingCall = `${yelpAPIBase}/${listingID}`;
@@ -76,30 +76,13 @@ const controller = {
       ])
 
     //Find user
-    let user = await userModel.findOne({ email: req.session.user });
+    const user = await userModel.findOne({ email: req.session.user });
 
-    //find save
-    // const findSave = await saveModel
-    //   .find({yelpID: listingID})
-    //   .populate([
-    //     {
-    //       path: "user",
-    //       select: "fullName preferredName email",
-    //     },
-    //   ])
-
-    // //User save
-    // const listingSaved = await saveModel
-    //   .findOne({
-    //     yelpID: listingID, 
-    //     user: {
-    //       email: req.session.user
-    //     }
-    //   })
-    //   .populate('user')
-
-    // console.log("listingSaved: ", listingSaved)
-
+    // Find savelisting of current user pertaining to this listing
+    let savedListing = null
+    if (user) {
+      savedListing = await saveModel.findOne({user: user._id, yelpID: listingID})
+    } 
     
     res.render("./pages/listing.ejs", {
       listing,
@@ -107,6 +90,7 @@ const controller = {
       listingLocation,
       allIkemenReviews,
       allYelpReviews,
+      savedListing,
       errorObject,
     });
   },

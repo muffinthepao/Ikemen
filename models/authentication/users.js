@@ -29,19 +29,6 @@ const userSchema = new mongoose.Schema({
     default: 'User',
     required: true
   },
-
-  // created: {
-  //   type: Date,
-  //   immutable: true,
-  //   default: () => Date.now(),
-  //   required: true
-  // },
-
-  // updated: {
-  //   type: Date,
-  //   default: () => Date.now(),
-  //   required: true
-  // }
 },
 {timestamps: true}
 
