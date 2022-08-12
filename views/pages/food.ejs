@@ -32,7 +32,12 @@
 <% foodListings.forEach(yelpListing => { %>
   <div id="food-image" class="mx-3 my-3 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md">
     <a href="/food/<%= yelpListing.id %>">
-        <img class="rounded-t-lg" src="<%= yelpListing.image_url %>" alt="" style ="height: 280px" object-fit: cover/>
+        <% if (yelpListing.image_url) { %>
+          <img class="rounded-t-lg" src="<%= yelpListing.image_url %>" alt="" style ="height: 280px" object-fit: cover/>
+        <% } else { %>
+          <img class="rounded-t-lg" src="/img/placeholder.png" alt="" style ="height: 280px" object-fit: cover/>
+        <% } %>
+        
     </a>
     <div class="p-5">
         <a href="/food/<%= yelpListing.id %> ">
@@ -58,6 +63,34 @@
   </div>
   <% }) %>
 </div>
+
+<nav aria-label="Page navigation example">
+  <ul class="flex flex-wrap justify-center mt-5">
+    <% if (page > 1) { %>
+      <li>
+        <a href="/food?page=<%= page - 1 %>" class="py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700">Previous</a>
+      </li>
+    <% } %> 
+
+      <% pageArray.forEach(p => { %>
+        <% if (page === p) { %>
+          <li>
+            <a href="/food?page=<%= p %>" aria-current="page" class="py-2 px-3 text-red-600 bg-red-50 border border-gray-300 hover:bg-red-100 hover:text-blue-700"><%= p %></a>
+          </li>
+        <% } else { %>
+          <li>
+            <a href="/food?page=<%= p %>" class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"><%= p %></a>
+          </li>
+        <% } %>
+      <% }) %> 
+
+    <% if (page < 50) { %>
+      <li>
+        <a href="/food?page=<%= page + 1 %>" class="py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700">Next</a>
+      </li>
+    <% }%> 
+  </ul>
+</nav>
 
 
 
