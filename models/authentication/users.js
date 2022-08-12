@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    lowercase: true
   },
 
   hash: {
@@ -25,9 +26,26 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     enum: ['Admin', 'User'],
-    default: 'User'
-  }
-});
+    default: 'User',
+    required: true
+  },
+
+  // created: {
+  //   type: Date,
+  //   immutable: true,
+  //   default: () => Date.now(),
+  //   required: true
+  // },
+
+  // updated: {
+  //   type: Date,
+  //   default: () => Date.now(),
+  //   required: true
+  // }
+},
+{timestamps: true}
+
+);
 
 const User = mongoose.model('User', userSchema)
 

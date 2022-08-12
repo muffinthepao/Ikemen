@@ -27,8 +27,22 @@ const reviewSchema = new mongoose.Schema({
   yelpID: {
     type: String,
     required: true
-  }
-});
+  },
+
+  // created: {
+  //   type: Date,
+  //   immutable: true,
+  //   default: () => Date.now(),
+  // },
+
+  // updated: {
+  //   type: Date,
+  //   default: () => Date.now(),
+  // }
+},
+{timestamps: true}
+
+);
 
 const Review = mongoose.model('Review', reviewSchema)
 

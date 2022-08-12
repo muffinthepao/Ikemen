@@ -164,7 +164,8 @@ const controller = {
       const updateReview = await reviewModel.findByIdAndUpdate(reviewID, {
         content: reviewValidated.content,
         rating: reviewValidated.rating,
-        edited: true
+        edited: true,
+        updated: new Date()
       })
 
       res.redirect(`/food/${listingID}`)
