@@ -63,6 +63,8 @@ app.post("/logout", authController.logout);
 app.get("/user/profile", userController.showProfile);
 app.put("/user/profile/edit", userController.updateUserDetails);
 app.put("/user/profile/changepassword", userController.changePassword);
+app.get("/user/profile/savedListings", userController.savedListings);
+
 
 
 app.listen(port, async () => {

@@ -1,10 +1,5 @@
-const yelpAPI = require("../../source/yelp_api");
-const yelpAPIBase = "https://api.yelp.com/v3/businesses";
-const mongoose = require("mongoose");
-
 const userModel = require("../../models/authentication/users");
 const listingModel = require("../../models/listings/listings");
-const reviewModel = require("../../models/reviews/reviews");
 const saveModel = require("../../models/saves/saves");
 
 const listingsValidator = require("../Joi_validators/listings");
