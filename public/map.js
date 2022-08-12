@@ -1,57 +1,57 @@
-// "use strict";
-// // Object.defineProperty(exports, "__esModule", { value: true });
+mapboxgl.accessToken =
+  "pk.eyJ1IjoiZ3VuZHVzdGFuIiwiYSI6ImNsNjdubmYzNzA1MDgza3FoaWxoaXhlaTkifQ.1C5TzAc0lhTVxr2q3yedbg";
 
-// // Initialize and add the map
-// function initMap() {
-//     const singaporeLatLong = { lat: 1.36548045615708, lng: 103.82020348793333 };
-//     // The map, centered at Singapore
-//     const map = new google.maps.Map(document.getElementById("map"), {
-//         center: singaporeLatLong,
-//         zoom: 12,
-//     });
-//     // The marker, positioned at Singapore
-//     // const marker = new google.maps.Marker({
-//     //     position: singaporeLatLong,
-//     //     map: map,
-//     // });
+navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
+  enableHighAccuracy: true,
+});
 
-//     //create the places service
-//     let service = new google.maps.places.PlacesService(map);
+function successLocation(position) {
+  console.log(position);
+  setupMap([position.coords.longitude, position.coords.latitude]);
+}
 
-//     let request = {
-//         query: "Bak Chor Mee",
-//         fields: ["name", "geometry"],
-//     };
+function errorLocation(position) {
+  setupMap([-2.24, 53.48]);
+}
 
-//     console.log(request)
+function setupMap(center) {
+  const map = new mapboxgl.Map({
+    container: "map",
+    style: "mapbox://styles/mapbox/streets-v11",
+    center: center,
+    zoom: 12,
+  });
 
-//     // The marker, positioned at Singapore
-//     // const marker = new google.maps.Marker({
-//     //     position: request,
-//     //     map: map,
-//     // });
+  const nav = map.addControl(new mapboxgl.NavigationControl());
 
-//     function createMarker(place) {
-//         if (!place.geometry || !place.geometry.location) return;
-//         let marker = new google.maps.Marker({
-//             map: map,
-//             position: place.geometry.location,
-//         });
-//         google.maps.event.addListener(marker, "click", function () {
-//             infowindow.setContent(place.name || "");
-//             infowindow.open(map);
-//         });
-//     }
+  map.addControl(
+    new MapboxDirections({
+      accessToken: mapboxgl.accessToken,
+    }),
+    "top-left"
+  );
 
-//     service.textSearch(request, function (results, status) {
-//         if (status === google.maps.places.PlacesServiceStatus.OK) {
-//             for (let i = 0; i < results.length; i++) {
-//                 console.log(results[i]);
-//                 createMarker(results[i]);
-//             }
-//             map.setCenter(results.geometry.location);
-//         }
-//     });
-// }
+  // const geojson = {
+  //   type: "FeatureCollection",
+  //   features: [
+  //     {
+  //       type: "Feature",
+  //       geometry: {
+  //         type: "Point",
+  //         coordinates: [position.coords.longitude, position.coords.latitude],
+  //       },
+  //       properties: {
+  //         title: "Mapbox",
+  //         description: "London",
+  //       },
+  //     },
+  //   ],
+  // };
 
-// window.initMap = initMap;
+  // geojason.features.array.forEach(function(marker) {
+  //   var el = document.createAttribute.Element('div');
+  //   el.className = 'marker';
+
+  //   new.mapboxgl.Marker(el).setLngLat(marker.geometry.coordinates).addTo(map)
+  // });
+}

@@ -2,16 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-/* #map {
-    height: 90%;
-} */
-
-/* html,
+html,
 body {
     height: 100%;
     margin: 0;
     padding: 0;
-} */
+}
+
+#map {
+    height: 80vh;
+}
+
+.marker {
+    background-image: url('/img/marker.png')
+}
 
 h1 {
     color: red

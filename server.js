@@ -39,7 +39,6 @@ app.get("/food", pageController.showListings);
 app.get("/food/:listing_id", pageController.showIndividualListing);
 app.get("/surprise", pageController.showSurprise);
 app.get("/surprise/generate", pageController.randomListing)
-// app.get("/surprise/:listing_id", pageController.generateRandomListing)
 
 //review routes
 app.post("/food/:listing_id/review", authMiddleware.isAuthenticated ,reviewController.submitReview);
