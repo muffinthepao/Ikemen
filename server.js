@@ -45,6 +45,7 @@ app.post("/food/:listing_id/review", authMiddleware.isAuthenticated ,reviewContr
 app.get("/food/:listing_id/review/:review_id", authMiddleware.isAuthenticated ,reviewController.showReview);
 app.put("/food/:listing_id/review/:review_id/edit", authMiddleware.isAuthenticated ,reviewController.editReview);
 app.delete("/food/:listing_id/review/:review_id/", authMiddleware.isAuthenticated ,reviewController.deleteReview);
+app.post("/food/:listing_id/save", authMiddleware.isAuthenticated ,reviewController.saveReview);
 
 
 //authentication routes

@@ -133,7 +133,7 @@ const controller = {
               return
           }
 
-          res.redirect('/food/KsHdXhRdu9UzjZXO7g9BHg')
+          res.redirect('/user/profile')
           // res.redirect('/')
       })
     })

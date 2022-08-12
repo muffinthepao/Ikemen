@@ -15,6 +15,10 @@ module.exports = {
       res.locals.authUser = req.session.user
     }
     next()
+  },
+
+  isBanned: (req, res, next) => {
+    
   }
 
 }

@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const userModel = require("../../models/authentication/users");
 const listingModel = require("../../models/listings/listings");
 const reviewModel = require("../../models/reviews/reviews");
+const saveModel = require("../../models/saves/saves");
 
 const listingsValidator = require("../validators/listings");
 const reviewsValidator = require("../validators/reviews");
@@ -19,6 +20,7 @@ const controller = {
 
     if (reviewValidationResults.error) {
       const validationError = reviewValidationResults.error.details;
+
       validationError.forEach((errorMessage) => {
         errorObject[errorMessage.context.key] = errorMessage.message;
       });
@@ -37,7 +39,7 @@ const controller = {
       const allIkemenReviews = await reviewModel.find({yelpID: listingID}).populate([{
         path: "user",
         select: "fullName preferredName email"
-    }])
+      }])
 
       res.render("./pages/listing.ejs", {
         listing,
@@ -53,6 +55,37 @@ const controller = {
     const reviewValidated = reviewValidationResults.value;
 
     let user = await userModel.findOne({ email: req.session.user });
+
+    const duplicate = await reviewModel.findOne({email: req.session.user, yelpID: listingID})
+
+    if (duplicate) {
+      let errorObject = {duplicate: "cannot have more than 1 review per listing"}
+      const listingID = req.params.listing_id;
+      const listingCall = `${yelpAPIBase}/${listingID}`;
+
+      //Individual Listing
+      const listing = await yelpAPI(listingCall);
+      const listingLocation = listing.location;
+
+      //Yelp Reviews. Max of 3 reviews. Yelp API limitation. 
+      const yelpReviews = await yelpAPI(`${listingCall}/reviews`)
+      const allYelpReviews = yelpReviews.reviews
+
+      const allIkemenReviews = await reviewModel.find({yelpID: listingID}).populate([{
+        path: "user",
+        select: "fullName preferredName email"
+      }])
+
+      res.render("./pages/listing.ejs", {
+        listing,
+        listingID,
+        listingLocation,
+        allIkemenReviews,
+        allYelpReviews,
+        errorObject,
+      });
+      return
+    }
 
     //create review document in db
     try {
@@ -108,7 +141,12 @@ const controller = {
       const listing = await yelpAPI(listingCall);
   
       //get review info
-      const review = await reviewModel.findById(reviewID).populate("user")
+      const review = await reviewModel.findById(reviewID).populate('user')
+          // {
+          //   path: "user",
+          //   select: "fullName preferredName email",
+          // },
+        // ]);
 
       res.render('./pages/edit_review.ejs', {
         errorObject,
@@ -191,12 +229,59 @@ const controller = {
           },
       });
 
+      res.redirect(`/food/${listingID}`)
 
     } catch (err) {
       console.log(err)
       res.send("cannot delete review at the moment. please try again later")
     }
-  }
+  },
+
+  saveReview: async (req, res) => {
+    const listingID = req.params.listing_id
+    let user = await userModel.findOne({ email: req.session.user });
+
+    try {
+      const save = await saveModel.create({
+        user: user._id,
+        yelpID: listingID
+      });
+
+      const listing = await listingModel.findOne({ yelpID: listingID })
+
+      if (listing){
+        const updateListing = await listingModel.findOneAndUpdate({ yelpID: listingID },
+          {
+            $push: {
+              saves: save._id,
+            },
+            $inc: {
+              saveCount: 1
+            }
+          }
+        );
+      }
+      
+      if (!listing){
+        const newListing = await listingModel.create({
+          yelpID: listingID,
+          avgRating: review.rating,
+          saves: [save._id],
+          saveCount: 1
+        })
+      }
+
+      res.redirect(`/food/${listingID}`);
+    } catch (err) {
+      console.log(err);
+      res.send("cannot save review");
+    }
+  },
+
+  // deleteSavedReview: async (req, res) => {
+  //   const listingID = req.params.listing_id;
+  //   const reviewID = req.params.review_id;
+  // }
 };
 
 module.exports = controller;

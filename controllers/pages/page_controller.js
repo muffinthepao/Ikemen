@@ -5,7 +5,9 @@ const yelpAPIBase = "https://api.yelp.com/v3/businesses";
 
 const listingModel = require("../../models/listings/listings");
 const reviewModel = require("../../models/reviews/reviews");
+const saveModel = require("../../models/saves/saves");
 const userModel = require("../../models/authentication/users");
+
 
 const controller = {
   showHome: (req, res) => {
@@ -65,15 +67,40 @@ const controller = {
     //Ikemen Reviews
     const allIkemenReviews = await reviewModel
       .find({ yelpID: listingID })
+      // .populate('user')
       .populate([
         {
           path: "user",
           select: "fullName preferredName email",
         },
-      ]);
+      ])
 
-    console.log(allIkemenReviews);
+    //Find user
+    let user = await userModel.findOne({ email: req.session.user });
 
+    //find save
+    // const findSave = await saveModel
+    //   .find({yelpID: listingID})
+    //   .populate([
+    //     {
+    //       path: "user",
+    //       select: "fullName preferredName email",
+    //     },
+    //   ])
+
+    // //User save
+    // const listingSaved = await saveModel
+    //   .findOne({
+    //     yelpID: listingID, 
+    //     user: {
+    //       email: req.session.user
+    //     }
+    //   })
+    //   .populate('user')
+
+    // console.log("listingSaved: ", listingSaved)
+
+    
     res.render("./pages/listing.ejs", {
       listing,
       listingID,

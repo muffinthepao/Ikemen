@@ -1,3 +1,11 @@
-wow =[a, b, c, d, e, f, g, h, i]
+const inventory = [
+  {name: 'apples', quantity: 2},
+  {name: 'bananas', quantity: 0},
+  {name: 'cherries', quantity: 5}
+];
 
-console.log(wow.find(x => x.email == "a@a.com"))
+function isCherries(fruit) {
+  return fruit.name === 'cherries';
+}
+
+console.log(inventory.find(isCherries));
