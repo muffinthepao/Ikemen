@@ -53,11 +53,11 @@ app.post("/food/:listing_id/save", authMiddleware.isAuthenticated , savesControl
 app.delete("/food/:listing_id/delete", authMiddleware.isAuthenticated , savesController.deleteSavedListing)
 
 //authentication routes
-app.get("/register", authController.showRegistrationForm);
-app.post("/register", authController.register);
-app.get("/login", authController.showLoginForm);
-app.post("/login", authController.login);
-app.post("/logout", authController.logout);
+app.get("/register", authMiddleware.isAuthenticated ,authController.showRegistrationForm);
+app.post("/register", authMiddleware.isAuthenticated ,authController.register);
+app.get("/login", authMiddleware.isAuthenticated ,authController.showLoginForm);
+app.post("/login", authMiddleware.isAuthenticated ,authController.login);
+app.post("/logout", authMiddleware.isAuthenticated ,authController.logout);
 
 //user routes
 app.get("/user/profile", userController.showProfile);

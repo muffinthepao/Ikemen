@@ -74,6 +74,7 @@ const controller = {
           select: "fullName preferredName email",
         },
       ])
+      .sort({updatedAt: -1})
 
     //Find user
     const user = await userModel.findOne({ email: req.session.user });
