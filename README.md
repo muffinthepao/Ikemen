@@ -41,6 +41,9 @@ The aim of this project was to incorporate as much of what I've learnt during Un
 
 ## Illustrations
 
+DB Schema
+![db-schema](./public/img/db_schema.png)
+
 Registration Page
 ![register-page](./public/img/register.png)
 
