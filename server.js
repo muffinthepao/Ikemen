@@ -60,10 +60,10 @@ app.post("/login", authController.login);
 app.post("/logout", authController.logout);
 
 //user routes
-app.get("/user/profile", userController.showProfile);
-app.put("/user/profile/edit", userController.updateUserDetails);
-app.put("/user/profile/changepassword", userController.changePassword);
-app.get("/user/profile/savedListings", userController.savedListings);
+app.get("/user/profile", authMiddleware.isAuthenticated ,userController.showProfile);
+app.put("/user/profile/edit", authMiddleware.isAuthenticated ,userController.updateUserDetails);
+app.put("/user/profile/changepassword", authMiddleware.isAuthenticated ,userController.changePassword);
+app.get("/user/profile/savedListings", authMiddleware.isAuthenticated ,userController.savedListings);
 
 
 
