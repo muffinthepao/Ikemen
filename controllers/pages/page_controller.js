@@ -59,6 +59,8 @@ const controller = {
     //Individual Listing
     const listing = await yelpAPI(listingCall);
     const listingLocation = listing.location;
+    const listingLatLong = listing.coordinates;
+    console.log(listingLatLong)
 
     //Yelp Reviews. Max of 3 reviews. Yelp API limitation.
     const yelpReviews = await yelpAPI(`${listingCall}/reviews`);
@@ -89,6 +91,7 @@ const controller = {
       listing,
       listingID,
       listingLocation,
+      listingLatLong,
       allIkemenReviews,
       allYelpReviews,
       savedListing,

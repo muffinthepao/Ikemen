@@ -25,7 +25,7 @@
               </form>
             <% } %>
             <a href="https://www.google.com/maps/search/?api=1&query=<%= listing.name %>%20singapore" target="_blank" rel="noopener noreferrer">
-            
+            <p>listingLatLong</p>
               <h3 class="font-small title-font mt-4 text-gray-900 text-lg">Address</h3>
               <p class="text-base"><%= listingLocation.address1 %>,</p>
               <p class="text-base"><%= listingLocation.address2 %>,</p>
@@ -38,7 +38,7 @@
               </button>
             </a>
 
-            <div id='map'></div>
+            <div id='map' class="mt-4"></div>
           </div>
         </div>
         <div class="sm:w-2/3 sm:pl-8 sm:py-8 sm:border-l border-gray-200 sm:border-t-0 border-t mt-4 pt-4 sm:mt-0 text-center sm:text-left">
@@ -187,39 +187,27 @@
 </section>
 
 <script>
-  let long = listing.coordinates.longitude;
-  let lat = listing.coordinates.latitude;
-  let singaporeLngLat = [long, lat];
+mapboxgl.accessToken = 'pk.eyJ1IjoiZ3VuZHVzdGFuIiwiYSI6ImNsNjdubmYzNzA1MDgza3FoaWxoaXhlaTkifQ.1C5TzAc0lhTVxr2q3yedbg';
+
+
+const map = new mapboxgl.Map({
+container: 'map', // container ID
+style: 'mapbox://styles/mapbox/streets-v11', // style URL
+center:  [<%=listing.coordinates.longitude%>, <%=listing.coordinates.latitude %>],// starting position [lng, lat]
+zoom: 15, // starting zoom
+projection: 'globe' // display the map as a 3D globe
+});
+ 
+map.on('style.load', () => {
+map.setFog({}); // Set the default atmosphere style
+});
+
+const marker = new mapboxgl.Marker({ color: 'red'})
+.setLngLat([<%=listing.coordinates.longitude%>, <%=listing.coordinates.latitude %>])
+.addTo(map);
   
-  mapboxgl.accessToken =
-    "pk.eyJ1IjoiZ3VuZHVzdGFuIiwiYSI6ImNsNjdubmYzNzA1MDgza3FoaWxoaXhlaTkifQ.1C5TzAc0lhTVxr2q3yedbg";
-  
-  navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
-    enableHighAccuracy: true,
-  });
-  
-  function successLocation(position) {
-    console.log(position);
-    setupMap([position.coords.longitude, position.coords.latitude]);
-  }
-  
-  function errorLocation(position) {
-    setupMap([-2.24, 53.48]);
-  }
-  
-  function setupMap(center) {
-    const map = new mapboxgl.Map({
-      container: "map",
-      style: "mapbox://styles/mapbox/streets-v11",
-      center: singaporeLngLat,
-      zoom: 11,
-    });
-  
-  const marker2 = new mapboxgl.Marker({ color: 'red'})
-  .setLngLat(singaporeLngLat)
-  .addTo(map);
-  }
-  
+
+
   </script>
 
 <%- include('../partials/footer'); %>
